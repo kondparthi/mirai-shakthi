@@ -1,0 +1,61 @@
+# Builds the MIRAI Shakthi Android app (APK) on GitHub's servers – no Android Studio needed.
+# Runs on every push that changes the frontend, or by hand: GitHub → Actions → "Android APK" → Run workflow.
+# Download: open the finished run → "Artifacts" → MIRAI-Shakthi-apk.
+name: Android APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, master]
+    paths: ["frontend/**", ".github/workflows/android-apk.yml"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: gradle
+
+      - name: Install packages
+        run: npm ci
+
+      - name: Build the app for Android (talks to the live server)
+        run: |
+          echo "VITE_API_BASE=${{ vars.API_BASE || 'https://miraimsme.com' }}" > .env.android
+          npx tsc -b
+          npx vite build --mode android
+
+      - name: Copy into the Android project
+        run: npx cap sync android
+
+      - name: Build APK
+        working-directory: frontend/android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon
+
+      - name: Name the file
+        run: |
+          mkdir -p ../apk
+          cp android/app/build/outputs/apk/debug/app-debug.apk "../apk/MIRAI-Shakthi-$(date +%Y%m%d)-${GITHUB_RUN_NUMBER}.apk"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: MIRAI-Shakthi-apk
+          path: apk/*.apk
+          retention-days: 30
