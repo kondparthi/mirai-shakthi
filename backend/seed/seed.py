@@ -79,6 +79,41 @@ def load_telugu(db) -> None:
                           status="published", language="te"))
 
 
+def load_masters(db) -> None:
+    """Phase 1: starter master data and the default readiness formula. Adds only what is missing."""
+    from app.models_p1 import MasterItem, Setting
+    from app.programme.readiness import default_formula
+    from seed.data_p1 import CONTEXT_TAGS, DISTRICTS, GUNTUR_MANDALS, SAMPLE_VILLAGES, SECTORS, SIMPLE
+
+    have = {(m.kind, m.code): m for m in db.scalars(select(MasterItem))}
+
+    def add(kind, code, en, te, parent=None, data=None, sort=100):
+        if (kind, code) in have:
+            return have[(kind, code)]
+        m = MasterItem(kind=kind, code=code, name_en=en, name_te=te, parent_id=parent.id if parent else None, data=data, sort=sort)
+        db.add(m)
+        db.flush()
+        have[(kind, code)] = m
+        return m
+
+    for i, (c, en, te) in enumerate(CONTEXT_TAGS):
+        add("context_tag", c, en, te, sort=i)
+    for c, en, te, tag in DISTRICTS:
+        add("district", c, en, te, data={"context_tag": tag})
+    guntur = have[("district", "guntur")]
+    for c, en, te in GUNTUR_MANDALS:
+        add("mandal", c, en, te, parent=guntur, data={"starter": True})
+    for mandal, c, en, te, tag in SAMPLE_VILLAGES:
+        add("village", c, en, te, parent=have[("mandal", mandal)], data={"context_tag": tag, "starter": True})
+    for i, (c, en, te, desc, tags, status, ws, icon) in enumerate(SECTORS):
+        add("sector", c, en, te, data={"description": desc, "context_tags": tags, "activation": status, "workspace": ws, "icon": icon}, sort=i)
+    for kind, rows in SIMPLE.items():
+        for i, (c, en, te) in enumerate(rows):
+            add(kind, c, en, te, sort=i)
+    if not db.get(Setting, "readiness_formula"):
+        db.add(Setting(key="readiness_formula", value=default_formula()))
+
+
 def main(reset: bool = False) -> None:
     ensure_database()
     if reset:
@@ -122,6 +157,7 @@ def main(reset: bool = False) -> None:
                 db.add(Expert(**e))
         db.flush()
         load_telugu(db)
+        load_masters(db)
         # Demo portal login for one sample expert (screen E1). Change or remove before go-live.
         demo = db.scalar(select(Expert).where(Expert.name == "Sample CA – Guntur"))
         demo_email = os.getenv("DEMO_EXPERT_EMAIL", "ca.guntur@mirai.local")

@@ -22,8 +22,10 @@ class User(TimestampMixin, Base):
     mobile: Mapped[Optional[str]] = mapped_column(String(15), unique=True)
     email: Mapped[Optional[str]] = mapped_column(String(190), unique=True)
     name: Mapped[Optional[str]] = mapped_column(String(120))
-    # msme | admin | reviewer | expert
+    # msme | expert | staff roles in app/roles.py (admin, programme_manager, coordinator, trainer, mentor, ...)
     role: Mapped[str] = mapped_column(String(20), default="msme", index=True)
+    # Phase 1 data scope for staff: {"districts": [...], "sectors": [...]}. Empty = see only own records (admin sees all).
+    scope: Mapped[Optional[dict]] = mapped_column(JSON)
     password_hash: Mapped[Optional[str]] = mapped_column(String(255))
     language: Mapped[str] = mapped_column(String(5), default="en")  # en | te
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
@@ -244,3 +246,7 @@ class AuditLog(Base):
     entity_id: Mapped[Optional[int]] = mapped_column(Integer)
     detail: Mapped[Optional[dict]] = mapped_column(JSON)
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
+
+
+# Phase 1 tables live in their own module; importing it registers them with the same metadata.
+from . import models_p1  # noqa: E402,F401

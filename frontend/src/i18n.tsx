@@ -220,6 +220,11 @@ const STRINGS = {
   stmtApplied: { en: "Figures filled from your bank statement. Open each month to check them, then make the summary.", te: "బ్యాంకు స్టేట్‌మెంట్ నుండి అంకెలు నింపాం. ప్రతి నెల తెరిచి చూసుకుని, సారాంశం తయారు చేయండి." },
   namaste: { en: "Namaste", te: "నమస్తే" },
   appSub: { en: "MSME AI Guidance", te: "ఎంఎస్ఎంఈ ఏఐ మార్గదర్శి" },
+  // Phase 1 – programme card on Home / Profile
+  programmeCardTitle: { en: "MIRAI enterprise programme", te: "MIRAI వ్యాపార కార్యక్రమం" },
+  programmeCardJoin: { en: "Training, project report, loan help and a mentor. Join in 10 minutes.", te: "శిక్షణ, ప్రాజెక్ట్ రిపోర్ట్, రుణ సహాయం, మెంటార్. 10 నిమిషాల్లో చేరండి." },
+  programmeCardOpen: { en: "See your stage, readiness score and next steps.", te: "మీ దశ, సన్నద్ధత స్కోరు, తదుపరి దశలు చూడండి." },
+  myDataLink: { en: "My data & privacy", te: "నా డేటా & గోప్యత" },
   // Landing page / login titles
   backHome: { en: "Home", te: "హోమ్" },
   createAccount: { en: "Create your account", te: "మీ ఖాతా తెరవండి" },

@@ -21,11 +21,29 @@ export function setToken(token: string | null) {
 
 export class ApiError extends Error {
   status: number;
-  constructor(status: number, message: string) {
+  /** Structured detail when the server sends more than a message (e.g. possible duplicates). */
+  detail?: Record<string, unknown>;
+  constructor(status: number, message: string, detail?: Record<string, unknown>) {
     super(message);
     this.status = status;
+    this.detail = detail;
   }
 }
+
+function errorMessage(status: number, detail: unknown): string {
+  if (Array.isArray(detail))
+    return detail.map((d: { msg?: string; loc?: (string | number)[] }) => {
+      const field = d.loc && d.loc.length > 1 ? String(d.loc[d.loc.length - 1]).replace(/_/g, " ") : "";
+      const msg = (d.msg ?? "").replace(/^Value error, /, "");
+      return field && !["body", "data"].includes(field) && msg.startsWith("Field required") ? `${field}: required` : msg;
+    }).join(", ");
+  if (typeof detail === "string") return detail;
+  if (detail && typeof detail === "object" && typeof (detail as { message?: unknown }).message === "string") return (detail as { message: string }).message;
+  return status === 413 ? "The file is too large." : "Something went wrong. Please try again.";
+}
+
+/** Full URL for a server path such as a photo link (needed in the Android build where the API is on another host). */
+export const apiUrl = (path: string) => `${BASE}${path}`;
 
 export async function api<T = unknown>(path: string, options: { method?: string; body?: unknown } = {}): Promise<T> {
   const headers: Record<string, string> = { "Content-Type": "application/json" };
@@ -45,12 +63,8 @@ export async function api<T = unknown>(path: string, options: { method?: string;
   if (!res.ok) {
     if (res.status === 401) setToken(null);
     const detail = (data as { detail?: unknown }).detail;
-    const message = Array.isArray(detail)
-      ? detail.map((d: { msg?: string }) => d.msg?.replace(/^Value error, /, "")).join(", ")
-      : typeof detail === "string"
-        ? detail
-        : "Something went wrong. Please try again.";
-    throw new ApiError(res.status, message);
+    throw new ApiError(res.status, errorMessage(res.status, detail),
+      detail && typeof detail === "object" && !Array.isArray(detail) ? (detail as Record<string, unknown>) : undefined);
   }
   return data as T;
 }
@@ -69,14 +83,14 @@ export async function apiUpload<T = unknown>(path: string, form: FormData): Prom
   const data = await res.json().catch(() => ({}));
   if (!res.ok) {
     if (res.status === 401) setToken(null);
-    const detail = (data as { detail?: unknown }).detail;
-    throw new ApiError(res.status, typeof detail === "string" ? detail : res.status === 413 ? "The file is too large." : "Something went wrong. Please try again.");
+    throw new ApiError(res.status, errorMessage(res.status, (data as { detail?: unknown }).detail));
   }
   return data as T;
 }
 
 // ---- Types shared with the backend ----
-export type User = { id: number; name: string | null; mobile: string | null; role: string; language: "en" | "te"; has_profile: boolean };
+export type User = { id: number; name: string | null; mobile: string | null; email?: string | null; role: string; language: "en" | "te"; has_profile: boolean;
+  scope?: { districts?: string[]; sectors?: string[] } };
 
 export type Profile = {
   owner_name: string;
@@ -173,3 +187,53 @@ export function openDownload(url: string) {
   const full = `${BASE}${url}`;
   if (!window.open(full, "_blank")) window.location.href = full;
 }
+
+/** Download a file that needs the login header (CSV exports), or save JSON data as a file. */
+export async function apiDownload(path: string, filename: string) {
+  const token = getToken();
+  let res: Response;
+  try {
+    res = await fetch(`${BASE}/api/v1${path}`, { headers: token ? { Authorization: `Bearer ${token}` } : {} });
+  } catch {
+    throw new ApiError(0, "No internet connection. Please check your network and try again.");
+  }
+  if (!res.ok) throw new ApiError(res.status, "Could not download the file.");
+  saveBlob(await res.blob(), filename);
+}
+
+export function saveBlob(blob: Blob, filename: string) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 2000);
+}
+
+// ---- Phase 1: programme (enrolment, groups, readiness) ----
+export type MasterOpt = { code: string; name_en: string; name_te: string | null; data: Record<string, unknown> };
+export type Assessment = {
+  id: number; score: number; band?: string; at: string | null; remarks: string | null; recommended: string[]; strengths: string[];
+  gaps: { code: string; label: string; advice: string | null }[];
+  breakdown: { code: string; label: string; answer: string | number | null; points: number; max: number }[];
+  answers: Record<string, string | number>;
+};
+export type EntrepreneurRow = {
+  id: number; full_name: string; mobile: string; gender: string | null; district: string | null; district_name: string | null;
+  mandal: string | null; mandal_name: string | null; village: string | null; village_name: string | null; context_tag: string | null;
+  stage: number; stage_name: string; status: string; verified: boolean; source: string; interests: string[]; interest_names: string[];
+  readiness: { score: number; at: string | null } | null; has_photo: boolean; photo_url: string | null; consent: boolean; created_at: string | null;
+};
+export type Entrepreneur = EntrepreneurRow & {
+  dob: string | null; social_category: string | null; education: string | null; aadhaar_masked: string | null; pan: string | null;
+  bank_masked: string | null; ifsc: string | null; bank_name: string | null; skills: string[]; skill_names: string[];
+  investment_available: number | null; has_loans: boolean | null; emi_amount: number | null; occupation: string | null;
+  monthly_income: number | null; consent_version: string | null; consent_at: string | null;
+  groups: { id: number; name: string; role: string }[]; missing: string[];
+  social_category_name?: string | null; education_name?: string | null; occupation_name?: string | null; bank_label?: string | null;
+  enrolled_by?: string | null; linked_account?: boolean; assessments?: Assessment[];
+};
+export type ReadinessQuestion = { code: string; label: string; kind: "choice" | "text"; options: [string, string][] };
+export const PAGE_SIZE = 25;

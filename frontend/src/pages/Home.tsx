@@ -14,10 +14,14 @@ export default function Home() {
   const [selected, setSelected] = useState<ModuleCard | null>(null);
   const [q, setQ] = useState("");
   const [voiceMsg, setVoiceMsg] = useState<string | null>(null);
+  const [enrolled, setEnrolled] = useState<boolean | null>(null);
 
   useEffect(() => {
     api<ModuleCard[]>(`/guidance/modules?lang=${lang}`).then(setModules).catch(() => {});
   }, [lang]);
+  useEffect(() => {
+    api<{ enrolled: boolean; needs_consent: boolean }>("/enrol/me").then((r) => setEnrolled(r.enrolled && !r.needs_consent)).catch(() => {});
+  }, []);
   useEffect(() => {
     api<SessionSummary[]>("/guidance/sessions").then((s) => setRecent(s[0] ?? null)).catch(() => {});
   }, []);
@@ -53,6 +57,16 @@ export default function Home() {
           </button>
         ))}
       </div>
+
+      {enrolled !== null && (
+        <Link to="/programme" className="card programme-card">
+          <div>
+            <b>{t("programmeCardTitle")}</b>
+            <div className="small">{enrolled ? t("programmeCardOpen") : t("programmeCardJoin")}</div>
+          </div>
+          <span aria-hidden="true">→</span>
+        </Link>
+      )}
 
       {recent && (
         <Link to={`/chat/${recent.id}`} className="card history-item">

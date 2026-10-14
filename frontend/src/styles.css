@@ -372,3 +372,79 @@ h3 { font-size: 15px; margin: 0 0 6px; }
 .logo-dark { color: #0a3a2c; } .logo-dark b { color: #13714f; }
 .logo-light { color: #fff; } .logo-light b { color: #ffc85a; }
 .topbar .brand .logo { font-size: 19px; }
+
+/* ---- Phase 1 Sprint 1: enrolment, readiness, staff portal ---- */
+.avatar { overflow: hidden; }
+.avatar img { width: 100%; height: 100%; object-fit: cover; }
+a.bar-row { color: inherit; text-decoration: none; }
+a.bar-row:hover { background: var(--green-50); }
+a.row-between { color: inherit; text-decoration: none; }
+
+/* entrepreneur app */
+.programme-card { display: flex; align-items: center; gap: 12px; text-decoration: none; color: #fff;
+  background: linear-gradient(135deg, var(--green-800), var(--m-connect)); }
+.programme-card b { display: block; font-size: 16px; margin-bottom: 2px; }
+.programme-card .small { opacity: 0.9; }
+.programme-card > span { margin-left: auto; font-size: 22px; }
+.profile-links { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; font-size: 14px; }
+.join-hero { background: linear-gradient(135deg, var(--green-900), var(--green-700)); color: #fff; border-radius: var(--radius); padding: 22px 18px; }
+.join-hero h1 { margin: 0 0 6px; color: #fff; }
+.join-hero p { margin: 0 0 14px; opacity: 0.92; font-size: 14.5px; }
+.journey { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+.journey li { display: flex; align-items: center; gap: 8px; font-size: 13px; background: rgba(255,255,255,0.1); border-radius: 10px; padding: 8px 10px; }
+.journey span { width: 22px; height: 22px; border-radius: 50%; background: #fff; color: var(--green-800); display: grid; place-items: center; font-weight: 700; font-size: 12px; flex: none; }
+.enrol-steps { list-style: none; margin: 0; padding: 0; display: flex; gap: 4px; }
+.enrol-steps li { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center; color: var(--ink-3); }
+.enrol-steps li span { width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--line); display: grid; place-items: center; font-weight: 700; font-size: 13px; background: #fff; }
+.enrol-steps li small { font-size: 11px; line-height: 1.2; }
+.enrol-steps li.on { color: var(--green-800); }
+.enrol-steps li.on span { border-color: var(--green-800); background: var(--green-800); color: #fff; }
+.enrol-steps li.done span { border-color: var(--ok); color: var(--ok); }
+.enrol-section h3 { margin: 6px 0 10px; font-size: 15px; color: var(--green-800); border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+.enrol-card { display: flex; gap: 14px; align-items: center; }
+.enrol-photo { width: 72px; height: 72px; border-radius: 50%; overflow: hidden; background: var(--green-100); color: var(--green-800);
+  display: grid; place-items: center; font-size: 28px; font-weight: 700; flex: none; }
+.enrol-photo img { width: 100%; height: 100%; object-fit: cover; }
+.stage-bar { display: grid; grid-template-columns: repeat(8, 1fr); gap: 4px; margin: 10px 0 6px; }
+.stage-bar span { height: 8px; border-radius: 4px; background: var(--line); }
+.stage-bar span.on { background: var(--m-connect); }
+
+/* readiness */
+.score-ring .track { fill: none; stroke: var(--line); stroke-width: 7; }
+.score-ring .bar { fill: none; stroke-width: 7; stroke-linecap: round; transition: stroke-dasharray 0.6s ease; }
+.score-ring.ok .bar { stroke: var(--ok); }
+.score-ring.amber .bar { stroke: #d58f1a; }
+.score-ring.alert .bar { stroke: var(--danger); }
+.score-ring text { font-size: 20px; font-weight: 700; fill: var(--ink); }
+.tick-list, .gap-list { margin: 6px 0 0; padding-left: 0; list-style: none; font-size: 14px; }
+.tick-list li { padding: 3px 0 3px 22px; position: relative; }
+.tick-list li::before { content: "✓"; position: absolute; left: 2px; color: var(--ok); font-weight: 700; }
+.gap-list li { padding: 6px 0 6px 22px; position: relative; border-bottom: 1px dashed var(--line); }
+.gap-list li:last-child { border-bottom: 0; }
+.gap-list li::before { content: "!"; position: absolute; left: 6px; color: var(--amber); font-weight: 800; }
+
+/* staff portal */
+.admin-side nav { overflow-y: auto; }
+.nav-group { display: flex; flex-direction: column; gap: 2px; margin-bottom: 10px; }
+.nav-title { font-size: 11px; letter-spacing: 0.6px; text-transform: uppercase; color: rgba(255,255,255,0.45); padding: 8px 12px 4px; }
+@media (max-width: 900px) {
+  .nav-group { flex-direction: row; margin: 0; }
+  .nav-title { display: none; }
+}
+.detail-head { display: flex; gap: 18px; align-items: center; flex-wrap: wrap; }
+.kv { display: flex; justify-content: space-between; gap: 12px; padding: 7px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
+.kv:last-child { border-bottom: 0; }
+.kv span { color: var(--ink-2); }
+.kv b { font-weight: 600; text-align: right; }
+.tabs { display: flex; gap: 4px; flex-wrap: wrap; border-bottom: 1px solid var(--line); }
+.tabs button { border: 0; background: none; padding: 9px 14px; font-size: 14px; color: var(--ink-2); border-bottom: 2.5px solid transparent; margin-bottom: -1px; text-transform: capitalize; }
+.tabs button.on { color: var(--green-800); border-bottom-color: var(--green-800); font-weight: 600; }
+.table tr.row-bad td { background: #fdf0ef; }
+.ok-notice { background: var(--ok-bg); color: var(--ok); }
+.json { margin: 0; font-size: 12px; white-space: pre-wrap; word-break: break-word; background: var(--green-50); padding: 10px; border-radius: 8px; }
+.dup-box { border: 1.5px solid var(--amber); background: var(--amber-bg); }
+.num-input { width: 84px !important; min-width: 0 !important; padding: 6px 8px !important; }
+.opt-pill { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); border-radius: 10px; padding: 4px 4px 4px 10px; font-size: 13px; }
+.formula-q { gap: 10px; }
+.table .input { padding: 6px 8px; font-size: 13.5px; }
+code { font-size: 0.92em; background: var(--green-50); padding: 1px 5px; border-radius: 4px; }

@@ -37,39 +37,49 @@ def _send_sms(mobile: str, code: str) -> None:
 
 def _user_out(u: User) -> dict:
     return {"id": u.id, "name": u.name, "mobile": u.mobile, "email": u.email, "role": u.role,
-            "language": u.language, "has_profile": u.profile is not None}
+            "language": u.language, "has_profile": u.profile is not None, "scope": u.scope or {}}
 
 
-@router.post("/otp/request")
-def request_otp(body: OtpRequest, db: Session = Depends(get_db)):
+def issue_otp(db: Session, mobile: str) -> dict:
+    """Create and send a one-time code. Also used for assisted enrolment (the entrepreneur's OTP is their consent)."""
     since = _now() - timedelta(minutes=15)
-    recent = db.scalar(select(func.count()).select_from(OtpCode).where(OtpCode.mobile == body.mobile, OtpCode.created_at >= since))
+    recent = db.scalar(select(func.count()).select_from(OtpCode).where(OtpCode.mobile == mobile, OtpCode.created_at >= since))
     if recent >= 5:
         raise HTTPException(429, "Too many OTP requests. Please try again after 15 minutes.")
     code = f"{secrets.randbelow(10**6):06d}"
-    db.add(OtpCode(mobile=body.mobile, code_hash=hash_secret(code), created_at=_now(),
+    db.add(OtpCode(mobile=mobile, code_hash=hash_secret(code), created_at=_now(),
                    expires_at=_now() + timedelta(minutes=settings.OTP_EXPIRE_MINUTES)))
     db.commit()
-    _send_sms(body.mobile, code)
+    _send_sms(mobile, code)
     out = {"sent": True, "expires_in_minutes": settings.OTP_EXPIRE_MINUTES}
     if settings.OTP_DEV_MODE:
         out["dev_code"] = code  # development only – never enable in production
     return out
 
 
-@router.post("/otp/verify")
-def verify_otp(body: OtpVerify, db: Session = Depends(get_db)):
-    otp = db.scalar(select(OtpCode).where(OtpCode.mobile == body.mobile, OtpCode.used.is_(False))
+def check_otp(db: Session, mobile: str, code: str) -> None:
+    """Raise 400 unless `code` is the latest unused OTP for `mobile`; marks it used."""
+    otp = db.scalar(select(OtpCode).where(OtpCode.mobile == mobile, OtpCode.used.is_(False))
                     .order_by(OtpCode.id.desc()).limit(1))
     if not otp or otp.expires_at < _now():
         raise HTTPException(400, "OTP expired. Please request a new one.")
     if otp.attempts >= 5:
         raise HTTPException(400, "Too many wrong attempts. Please request a new OTP.")
-    if not verify_secret(body.code, otp.code_hash):
+    if not verify_secret(code, otp.code_hash):
         otp.attempts += 1
         db.commit()
         raise HTTPException(400, "Wrong OTP. Please check and try again.")
     otp.used = True
+
+
+@router.post("/otp/request")
+def request_otp(body: OtpRequest, db: Session = Depends(get_db)):
+    return issue_otp(db, body.mobile)
+
+
+@router.post("/otp/verify")
+def verify_otp(body: OtpVerify, db: Session = Depends(get_db)):
+    check_otp(db, body.mobile, body.code)
     user = db.scalar(select(User).where(User.mobile == body.mobile))
     if not user:
         if not body.consent:

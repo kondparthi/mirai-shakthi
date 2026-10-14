@@ -16,6 +16,8 @@ const History = lazy(() => import("./pages/History"));
 const JdTool = lazy(() => import("./pages/JdTool"));
 const ProfilePage = lazy(() => import("./pages/Profile"));
 const Landing = lazy(() => import("./pages/Landing"));
+const Programme = lazy(() => import("./pages/Programme"));
+const MyData = lazy(() => import("./pages/MyData"));
 const RequestList = lazy(() => import("./pages/Requests").then((m) => ({ default: m.RequestList })));
 const RequestDetail = lazy(() => import("./pages/Requests").then((m) => ({ default: m.RequestDetail })));
 
@@ -95,7 +97,9 @@ export default function App() {
   if (!user) return location.pathname.startsWith("/login") ? <Login /> : <Suspense fallback={<Loading />}><Landing /></Suspense>;
   if (user.role === "expert") return <Navigate to="/expert" replace />;
   if (user.role !== "msme") return <Navigate to="/admin" replace />;
-  if (!user.has_profile && location.pathname !== "/profile") return <Navigate to="/profile" replace />;
+  // The business profile is needed for guidance; the programme enrolment has its own form, so it is reachable without it.
+  const noProfileOk = ["/profile", "/programme", "/my-data"].includes(location.pathname);
+  if (!user.has_profile && !noProfileOk) return <Navigate to="/profile" replace />;
 
   return (
     <Shell>
@@ -111,6 +115,8 @@ export default function App() {
         <Route path="/requests" element={<RequestList />} />
         <Route path="/requests/:requestId" element={<RequestDetail />} />
         <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/programme" element={<Programme />} />
+        <Route path="/my-data" element={<MyData />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
       </Suspense>

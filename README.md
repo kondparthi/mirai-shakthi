@@ -131,6 +131,44 @@ npm install                               # new: speech recognition plugin for t
 npx cap sync android                      # registers the plugin and microphone permission in the Android project
 ```
 
+## Phase 1, Sprint 1 – Enrolment, masters and access
+
+**Staff portal** (`#/admin`) now shows a menu for each role. Programme screens: Overview, Entrepreneurs, Groups, Bulk import.
+Settings: Master data, Readiness formula, Staff & access, Audit log, Data requests.
+
+| Role | Sees |
+|---|---|
+| Super Admin | Everything |
+| Programme Manager | All districts; masters, readiness formula, audit log |
+| District Coordinator / Field Navigator, SHG Federation Staff | Enrol and edit entrepreneurs and groups in their districts |
+| Mentor, Trainer, DPR officer, Procurement, Sector expert | Read entrepreneurs and groups in their districts (mentors also record readiness) |
+| Content Reviewer | AI assistant review screens (Phase 0) |
+
+Staff with no districts set see only the records they enrolled.
+
+- **Entrepreneur profile (Form 1.1).** Self-enrolment in the app (Home → *MIRAI enterprise programme*, step by step, English/Telugu, camera photo), or assisted by a Field Navigator: an OTP goes to the entrepreneur's phone and reading it out is their consent.
+  - Aadhaar is checked (Verhoeff) and **only the last 4 digits are stored**. The bank account number is **encrypted** (`DATA_KEY`). Both are always shown masked.
+  - Duplicates are checked on mobile number, and on Aadhaar last 4 + name + date of birth (staff can override after checking).
+  - Staff can mark a profile *verified* only when nothing is missing (photo, Aadhaar, bank account, consent, …).
+- **Group profile (Form 1.2).** SHG / JLG / producer group with members; exactly one leader, one secretary and one treasurer. Members whose mobile is enrolled are linked to their profile.
+- **Readiness (Form 1.3).** Score 0–100 from 8 questions plus own funds; strengths, gaps with advice, recommended training. Repeatable. The formula (weights, points, advice, bands) is editable under Settings → Readiness formula.
+- **Bulk import** of entrepreneurs from CSV (template provided) with a preview of every problem before anything is saved. Imported people confirm their details and give consent the first time they open the app.
+- **Master data**: 26 AP districts, starter Guntur mandals and sample villages (load the full LGD list by CSV), context tags, 9 sectors with Catalogue / Pilot / Active status, skills, education, occupation, social category, document types, banks. Every list has CSV export and import.
+- **DPDP**: people download their data and ask for deletion in the app (Profile → *My data & privacy*). Admins see the requests, download the data, and erase the account (photo, enrolment, conversations, documents).
+- **Audit log** of every change: who, what, when.
+
+### Updating to Phase 1 Sprint 1
+
+1. Copy the changed files over the project.
+2. Back end:
+   - `py -m pip install -r requirements.txt` (adds Pillow).
+   - `py -m seed.seed` (adds the `users.scope` column, the new tables, master data and the default readiness formula).
+3. Front end: `npm run build` (no new packages).
+4. Server, once: add `DATA_KEY` to `backend/.env`.
+   - Generate it with `python3 -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())"`.
+   - Keep a copy somewhere safe and **never change it**: bank numbers saved with it cannot be read without it.
+   - Photos are stored in `backend/storage/photos`. Include that folder in backups.
+
 ## Run it on your computer
 
 Requirements: Python 3.12+ (3.14 works), Node 20+, MySQL 8. On Windows use `py -m pip …` and `py -m …` so packages and commands use the same Python.

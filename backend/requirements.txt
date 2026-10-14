@@ -16,4 +16,6 @@ python-multipart>=0.0.9
 openpyxl>=3.1
 xlrd>=2.0
 pdfplumber>=0.11
+# Phase 1 – entrepreneur photos
+pillow>=10.3
 pytest>=8

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { api, type Option, type Profile, type ProfileOptions } from "../api";
 import { useAuth } from "../auth";
 import { useLang } from "../i18n";
@@ -140,6 +140,10 @@ export default function ProfilePage() {
             <button className="btn" disabled={!cards[step].valid} onClick={() => setStep(step + 1)}>{t("next")}</button>
           )}
         </div>
+      </div>
+      <div className="profile-links">
+        <Link to="/programme">{t("programmeCardTitle")} →</Link>
+        <Link to="/my-data">{t("myDataLink")} →</Link>
       </div>
       {user?.has_profile && (
         <button className="btn ghost" style={{ marginTop: 16 }} onClick={signOut}>{t("logout")}</button>
