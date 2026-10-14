@@ -1,19 +1,27 @@
 :root {
-  --green-900: #143628;
-  --green-800: #1f4d3a;
-  --green-700: #2a6249;
-  --green-100: #e3eeea;
-  --green-50: #f2f7f4;
-  --ink: #1b2420;
-  --ink-2: #4c5a53;
-  --ink-3: #7a8780;
-  --line: #d8e2dc;
-  --bg: #f6f8f7;
+  /* Landing-page palette: forest → emerald → teal, marigold for the main action. */
+  --green-900: #0a3a2c;
+  --green-800: #0f4a38;
+  --green-700: #13714f;
+  --green-100: #e3f4ec;
+  --green-50: #f1f8f4;
+  --forest: #0a3a2c;
+  --emerald: #13714f;
+  --teal: #1e9c88;
+  --mint: #e3f4ec;
+  --marigold: #f6a821;
+  --marigold-ink: #3a2400;
+  --ink: #12241c;
+  --ink-2: #4a5a53;
+  --ink-3: #6f7f78;
+  --line: #dbe7e1;
+  --track: #e8f0ec;
+  --bg: #f4f8f6;
   --card: #ffffff;
-  --amber: #b26a00;
-  --amber-bg: #fff4e0;
-  --ok: #1d7a46;
-  --ok-bg: #e5f4ea;
+  --amber: #a85d00;
+  --amber-bg: #fff3dc;
+  --ok: #157548;
+  --ok-bg: #e2f5ea;
   --danger: #b3261e;
   /* module colours, from the client's five-step strip */
   --m-understanding: #5272b3;
@@ -21,8 +29,9 @@
   --m-information: #d58443;
   --m-guidance: #ad9332;
   --m-connect: #568a5e;
-  --radius: 14px;
-  --shadow: 0 1px 2px rgba(20, 54, 40, 0.06), 0 4px 16px rgba(20, 54, 40, 0.06);
+  --radius: 16px;
+  --shadow: 0 1px 2px rgba(10, 58, 44, 0.05), 0 8px 24px -14px rgba(10, 58, 44, 0.18);
+  --display: "Anek Latin Variable", "Anek Telugu Variable", "Noto Sans", "Noto Sans Telugu", system-ui, sans-serif;
   font-family: "Noto Sans", "Noto Sans Telugu", system-ui, sans-serif;
   color: var(--ink);
   background: var(--bg);

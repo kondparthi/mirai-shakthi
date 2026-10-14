@@ -15,6 +15,7 @@ import "@fontsource/noto-sans-telugu/telugu-400.css";
 import "@fontsource/noto-sans-telugu/telugu-600.css";
 import "@fontsource/noto-sans-telugu/telugu-700.css";
 import "./styles.css";
+import "./theme.css";
 
 // HashRouter works both in the browser and inside the Android (Capacitor) app without server rewrites.
 ReactDOM.createRoot(document.getElementById("root")!).render(

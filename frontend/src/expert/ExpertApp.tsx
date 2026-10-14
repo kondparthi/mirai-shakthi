@@ -3,6 +3,9 @@ import { useCallback, useEffect, useState } from "react";
 import { Link, Navigate, NavLink, Route, Routes, useNavigate, useParams } from "react-router-dom";
 import { api, openDownload, type ConnectRequest, type User } from "../api";
 import { useAuth } from "../auth";
+import { BriefcaseBusiness, Menu } from "lucide-react";
+import Logo from "../components/Logo";
+import UserMenu from "../components/UserMenu";
 import { MessageBox, rupees, StatusSteps, StatusTag, Timeline, when } from "../components/Timeline";
 
 type Me = { id: number; name: string; organisation: string | null; type: string; services: string[]; districts: string[];
@@ -210,6 +213,7 @@ function CaseDetail() {
 
 export default function ExpertApp() {
   const { user, signOut } = useAuth();
+  const [navOpen, setNavOpen] = useState(false);
   const [me, setMe] = useState<Me | null>(null);
   const [error, setError] = useState<string | null>(null);
   useEffect(() => {
@@ -220,21 +224,25 @@ export default function ExpertApp() {
   if (user.role !== "expert") return <Navigate to="/admin" replace />;
 
   return (
-    <div className="admin">
-      <aside className="admin-side">
-        <div className="admin-brand">MIRAI Shakthi<small>Expert workspace</small></div>
-        <nav>
-          <NavLink to="/expert" end>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M9 11l3 3 8-8M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9" /></svg>
-            My cases
-          </NavLink>
+    <div className={`admin ${navOpen ? "nav-open" : ""}`}>
+      <aside className="admin-side" aria-label="Main menu">
+        <div className="admin-brand"><Logo tone="light" size={38} /><small>Expert workspace</small></div>
+        <nav onClick={() => setNavOpen(false)}>
+          <div className="nav-group">
+            <div className="nav-title">Handholding</div>
+            <NavLink to="/expert" end><BriefcaseBusiness aria-hidden="true" strokeWidth={1.9} />My cases</NavLink>
+          </div>
         </nav>
-        <div className="admin-user">
-          <div>{me?.name ?? user.name ?? "Expert"}</div>
-          <small className="muted">{me?.organisation ?? "expert"}</small>
-          <button className="btn ghost small" onClick={signOut}>Sign out</button>
-        </div>
+        <div className="admin-side-foot">MIRAI Shakthi · Expert</div>
       </aside>
+      <div className="side-scrim" onClick={() => setNavOpen(false)} />
+      <div className="admin-body">
+      <header className="admin-top">
+        <button className="burger" aria-label="Open menu" onClick={() => setNavOpen(true)}><Menu /></button>
+        <div className="crumb"><small>Expert workspace</small><b>My cases</b></div>
+        <div className="spacer" />
+        <UserMenu name={me?.name ?? user.name ?? "Expert"} sub={me?.organisation ?? "Expert"} detail={user.email ?? undefined} onSignOut={signOut} />
+      </header>
       <main className="admin-main">
         {error && <div className="error">{error}</div>}
         <Routes>
@@ -243,6 +251,7 @@ export default function ExpertApp() {
           <Route path="*" element={<Navigate to="/expert" replace />} />
         </Routes>
       </main>
+      </div>
     </div>
   );
 }

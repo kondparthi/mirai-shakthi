@@ -56,7 +56,7 @@ export default function Login() {
         </div>
       </div>
       <div className="hero">
-        <h1 style={{ margin: 0 }}><Logo size={46} /></h1>
+        <h1 style={{ margin: 0 }}><Logo tone="light" size={46} /></h1>
         <p className="muted">{t("tagline")}</p>
         <h2 style={{ margin: "16px 0 0", fontSize: 20 }}>{isNew ? t("createAccount") : t("loginTitle")}</h2>
         <p className="small muted" style={{ margin: "4px 0 0" }}>{t("loginHint")}</p>

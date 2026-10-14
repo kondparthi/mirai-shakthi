@@ -3,6 +3,8 @@ import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { api, apiDownload, apiUrl, type ExternalCert } from "../../api";
 import { useAuth } from "../../auth";
+import { Award, GraduationCap, UsersRound, Venus } from "lucide-react";
+import { HBars, Panel, StatTile } from "../../components/charts";
 
 type G = { key: string; batches: number; trainees: number; completed: number; certified: number; cert_rate: number; rating: number | null };
 type S = { batches: number; running: number; upcoming: number; trainees: number; women: number; certified: number; by_course: G[]; by_sponsor: G[]; by_district: G[] };
@@ -86,10 +88,20 @@ export default function Reports() {
           <button className="btn secondary" onClick={() => apiDownload(`/training/reports/trainees.csv${sponsor ? `?sponsor=${encodeURIComponent(sponsor)}` : ""}`, "training_trainees.csv")}>Download trainee list (CSV)</button>
         </div>
       </div>
-      <div className="kpis">
-        <div><span>Batches</span><b>{s.batches}</b></div><div><span>Running now</span><b>{s.running}</b></div><div><span>Upcoming</span><b>{s.upcoming}</b></div>
-        <div><span>Trainees</span><b>{s.trainees}</b></div><div><span>Women</span><b>{s.trainees ? Math.round((100 * s.women) / s.trainees) : 0}%</b></div>
-        <div><span>Certified</span><b>{s.certified}</b></div>
+      <div className="stats">
+        <StatTile icon={<GraduationCap />} label="Batches" value={s.batches} note={`${s.running} running · ${s.upcoming} upcoming`} to="/admin/training/batches" />
+        <StatTile icon={<UsersRound />} tone="blue" label="Trainees" value={s.trainees} />
+        <StatTile icon={<Venus />} tone="violet" label="Women" value={`${s.trainees ? Math.round((100 * s.women) / s.trainees) : 0}%`} ratio={s.trainees ? s.women / s.trainees : 0} />
+        <StatTile icon={<Award />} tone="amber" label="Certified" value={s.certified} ratio={s.trainees ? s.certified / s.trainees : 0}
+          note={`${s.trainees ? Math.round((100 * s.certified) / s.trainees) : 0}% of trainees`} />
+      </div>
+      <div className="dash-grid">
+        <Panel title="Trainees by course" className="span-6">
+          <HBars empty="No batches yet." rows={s.by_course.map((g) => ({ key: g.key, label: g.key, value: g.trainees, hint: `${g.trainees} trainees · ${g.certified} certified (${g.cert_rate}%)` }))} />
+        </Panel>
+        <Panel title="Certified by sponsor" className="span-6">
+          <HBars empty="No batches yet." rows={s.by_sponsor.map((g) => ({ key: g.key, label: g.key, value: g.certified, color: "#3270bd", hint: `${g.certified} of ${g.trainees} certified` }))} />
+        </Panel>
       </div>
       <Table title="By course" rows={s.by_course} />
       <Table title="By sponsor" rows={s.by_sponsor} />

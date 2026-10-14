@@ -1,7 +1,9 @@
 import { lazy, Suspense, useEffect } from "react";
 import { Navigate, NavLink, Route, Routes, useLocation, useParams } from "react-router-dom";
 import { useAuth } from "./auth";
+import { GraduationCap, ShieldCheck, Sprout, UserRound } from "lucide-react";
 import Logo from "./components/Logo";
+import UserMenu from "./components/UserMenu";
 import { useLang } from "./i18n";
 import Chat from "./pages/Chat";
 import Home from "./pages/Home";
@@ -48,7 +50,9 @@ export function LangToggle() {
 }
 
 function Shell({ children }: { children: React.ReactNode }) {
-  const { t } = useLang();
+  const { t, lang } = useLang();
+  const { user, signOut } = useAuth();
+  const name = user?.name || user?.mobile || "MSME";
   return (
     <div className="shell">
       <header className="topbar">
@@ -57,6 +61,13 @@ function Shell({ children }: { children: React.ReactNode }) {
         </div>
         <div className="spacer" />
         <LangToggle />
+        <UserMenu name={name} detail={user?.name && user?.mobile ? `+91 ${user.mobile}` : undefined} onSignOut={signOut} signOutLabel={t("logout")}
+          items={<>
+            <NavLink role="menuitem" to="/profile"><UserRound aria-hidden="true" />{t("profile")}</NavLink>
+            <NavLink role="menuitem" to="/programme"><Sprout aria-hidden="true" />{t("programmeCardTitle")}</NavLink>
+            <NavLink role="menuitem" to="/training"><GraduationCap aria-hidden="true" />{lang === "te" ? "నా శిక్షణ" : "My training"}</NavLink>
+            <NavLink role="menuitem" to="/my-data"><ShieldCheck aria-hidden="true" />{t("myDataLink")}</NavLink>
+          </>} />
       </header>
       <main className="page">{children}</main>
       <nav className="bottomnav">
