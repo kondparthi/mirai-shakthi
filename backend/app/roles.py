@@ -28,3 +28,10 @@ ALL_SCOPE = ("admin", "programme_manager")
 # Master data, users and access.
 MASTERS_WRITE = ("admin", "programme_manager")
 ACCESS_ADMIN = ("admin",)
+
+# Phase 1 Sprint 2 – training (M4)
+TRAINING_READ = PROGRAMME_READ                                   # see batches in scope (trainers: their own batches)
+TRAINING_ADMIN = ("admin", "programme_manager")                  # courses and training partners
+BATCH_WRITE = ("admin", "programme_manager", "coordinator")      # plan batches, nominate, verify external certificates
+TRAINING_RUN = BATCH_WRITE + ("trainer",)                        # sessions, attendance, assessment, results
+FOLLOWUP_WRITE = ("admin", "programme_manager", "coordinator", "mentor")

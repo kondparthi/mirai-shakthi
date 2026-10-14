@@ -448,3 +448,46 @@ a.row-between { color: inherit; text-decoration: none; }
 .formula-q { gap: 10px; }
 .table .input { padding: 6px 8px; font-size: 13.5px; }
 code { font-size: 0.92em; background: var(--green-50); padding: 1px 5px; border-radius: 4px; }
+
+/* ---- Phase 1 Sprint 2: training ---- */
+.batch-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+.batch-card { display: flex; flex-direction: column; gap: 5px; text-align: left; border: 1px solid transparent; font: inherit; color: inherit; cursor: pointer; }
+.batch-card:hover { border-color: var(--green-700); }
+.card.dim { opacity: 0.6; }
+.seat-bar { height: 6px; border-radius: 3px; background: var(--green-50); overflow: hidden; margin-top: 4px; }
+.seat-bar span { display: block; height: 100%; background: var(--m-connect); }
+.session-card { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; padding: 12px 14px; }
+.session-card.done { border-left: 4px solid var(--ok); }
+.session-n { width: 34px; height: 34px; border-radius: 50%; background: var(--green-100); color: var(--green-800); display: grid; place-items: center; font-weight: 700; flex: none; }
+.session-card.done .session-n { background: var(--ok); color: #fff; }
+.session-photo { width: 64px; height: 48px; object-fit: cover; border-radius: 8px; display: block; }
+.att-list { display: flex; flex-direction: column; gap: 6px; max-height: 55vh; overflow-y: auto; }
+.att-row { display: flex; align-items: center; gap: 12px; padding: 8px 10px; border: 1.5px solid var(--line); border-radius: 12px; background: #fff; text-align: left; font: inherit; min-height: 58px; }
+.att-row span:nth-child(2) { flex: 1; display: flex; flex-direction: column; }
+.att-row.on { border-color: var(--ok); background: var(--ok-bg); }
+.att-mark { width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--line); display: grid; place-items: center; font-weight: 800; color: #fff; flex: none; }
+.att-row.on .att-mark { background: var(--ok); border-color: var(--ok); }
+.qr-box { width: min(300px, 80vw); background: #fff; padding: 8px; border-radius: 12px; box-shadow: var(--shadow); }
+.qr-box svg { width: 100%; height: auto; display: block; }
+.checkin-code { font-size: 40px; font-weight: 800; letter-spacing: 6px; color: var(--green-800); font-variant-numeric: tabular-nums; }
+.result-card { display: flex; flex-direction: column; gap: 10px; }
+.result-card .field { min-width: 0; }
+
+/* entrepreneur app – training */
+.train-card { display: flex; flex-direction: column; gap: 6px; }
+.train-card .row-between b { font-size: 15.5px; }
+.session-dots { display: flex; gap: 4px; flex-wrap: wrap; }
+.session-dots span { width: 18px; height: 18px; border-radius: 50%; background: var(--line); font-size: 10px; display: grid; place-items: center; color: var(--ink-2); }
+.session-dots span.held { background: #f3d9d6; }
+.session-dots span.ok { background: var(--ok); color: #fff; }
+.checkin-card { border: 2px solid var(--m-connect); background: var(--ok-bg); }
+.code-input { font-size: 26px; letter-spacing: 8px; text-align: center; font-variant-numeric: tabular-nums; }
+.stars { display: flex; gap: 6px; }
+.stars button { font-size: 28px; background: none; border: 0; color: #d0c6a6; padding: 0 2px; line-height: 1; }
+.stars button.on { color: #e3a21a; }
+.verify-page { max-width: 520px; margin: 0 auto; padding: 32px 16px; }
+.verify-badge { width: 72px; height: 72px; border-radius: 50%; display: grid; place-items: center; font-size: 36px; color: #fff; margin: 0 auto; }
+@media (max-width: 640px) {
+  .session-card > .row-gap { flex-basis: 100%; padding-left: 48px; }
+  .session-card > div[style] { flex-basis: calc(100% - 48px) !important; }
+}

@@ -229,6 +229,11 @@ def resolve_request(rid: int, body: ResolveIn, user: User = Depends(admin_only),
                 for gm in e.memberships:  # the group keeps its record; this person's details are removed from it
                     gm.name, gm.mobile, gm.entrepreneur_id = "(removed on request)", None, None
                 delete_photo(e.photo)
+                from ..models_p2 import ExternalCertificate
+                from ..training.service import cert_file_path
+                for x in db.scalars(select(ExternalCertificate).where(ExternalCertificate.entrepreneur_id == e.id)):
+                    if x.file:
+                        cert_file_path(x.file).unlink(missing_ok=True)
                 db.delete(e)
             db.flush()
             # The database removes the profile, conversations, documents and requests with the user (ON DELETE CASCADE).

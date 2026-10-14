@@ -18,4 +18,6 @@ xlrd>=2.0
 pdfplumber>=0.11
 # Phase 1 – entrepreneur photos
 pillow>=10.3
+# Phase 1 Sprint 2 – QR codes on certificates and check-in
+segno>=1.6
 pytest>=8

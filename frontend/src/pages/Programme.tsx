@@ -142,6 +142,11 @@ export default function Programme() {
         <button className="btn secondary" onClick={() => setMode("form")}>{t("editDetails")}</button>
       </div>
 
+      <Link to="/training" className="card programme-card">
+        <div><b>{t("myTraining")}</b><div className="small">{t("trainingIntro")}</div></div>
+        <span aria-hidden="true">→</span>
+      </Link>
+
       <div className="card stack">
         <h2 style={{ margin: 0 }}>{t("readiness")}</h2>
         {last ? <ReadinessResult a={last} lang={lang} /> : <p className="small muted" style={{ margin: 0 }}>{t("readinessIntro")}</p>}

@@ -35,6 +35,9 @@ class Settings:
     AI_MODEL = os.getenv("AI_MODEL", "claude-sonnet-5-5")
     AI_MAX_TOKENS = int(os.getenv("AI_MAX_TOKENS", "1200"))
 
+    # Public address of the site; used in certificate QR codes and check-in links.
+    PUBLIC_URL = os.getenv("PUBLIC_URL", "https://miraimsme.com").rstrip("/")
+
     CORS_ORIGINS = [o.strip() for o in os.getenv("CORS_ORIGINS", "http://localhost:5173").split(",") if o.strip()]
 
 

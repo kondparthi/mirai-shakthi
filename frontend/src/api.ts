@@ -237,3 +237,37 @@ export type Entrepreneur = EntrepreneurRow & {
 };
 export type ReadinessQuestion = { code: string; label: string; kind: "choice" | "text"; options: [string, string][] };
 export const PAGE_SIZE = 25;
+
+// ---- Phase 1 Sprint 2: training ----
+export type Track = "awareness" | "core" | "skill" | "ojt" | "exposure" | "refresher";
+export type CourseLite = { id: number; code: string; track: Track; track_label: string; name: string; name_en: string; name_te: string | null;
+  duration_days: number; sectors: string[]; active: boolean; sessions_count: number; external_certificate: string | null; description?: string | null };
+export type CourseFull = CourseLite & { description_en: string | null; description_te: string | null; sessions: { topic_en: string; topic_te: string | null; hours: number | null }[];
+  outcomes: string[]; pass_mark: number; min_attendance: number; practical_checklist: string[]; business_plan_score: boolean };
+export type BatchRow = {
+  id: number; code: string; course: CourseLite; partner: string | null; partner_id: number | null; trainer_ids: number[]; mentor_ids: number[];
+  trainers: string[]; mentors: string[]; mode: string; start_date: string; end_date: string; venue: string | null; host_unit: string | null;
+  district: string | null; district_name: string | null; seats: number; filled: number; requested: number; sponsor_type: string;
+  sponsor_name: string | null; pass_mark: number; status: string; sessions_total: number; sessions_done: number; certified: number;
+};
+export type SessionRow = { id: number; n: number; date: string | null; topic: string; topic_en: string; topic_te: string | null; hours: number | null;
+  done: boolean; present: number; present_ids: number[]; photo_url: string | null; lat: number | null; lng: number | null; checkin_open: boolean };
+export type TraineeRow = {
+  id: number; status: string; source: string; mentor_id: number | null; mentor: string | null;
+  entrepreneur: { id: number; full_name: string; mobile: string; village_name: string | null; district_name: string | null; photo_url: string | null; stage: number };
+  attended: number; held: number; total: number; attendance_pct: number; quiz_score: number | null; practical: Record<string, boolean>;
+  practical_hours: number | null; bp_score: number | null; result: string | null; suggested: string; suggested_why: string[];
+  certificate_no: string | null; certified_at: string | null; feedback_rating: number | null; feedback_text: string | null;
+};
+export type BatchDetail = Omit<BatchRow, "course"> & { course: CourseFull; sessions: SessionRow[]; trainees: TraineeRow[]; can_run: boolean; can_plan: boolean };
+export type TrainingMeta = { tracks: { code: Track; label: string; label_te: string }[]; trainers: { id: number; name: string }[];
+  mentors: { id: number; name: string }[]; courses: CourseLite[]; partners: { id: number; name: string; kind: string }[] };
+export type ExternalCert = { id: number; kind: string; title: string; number: string | null; issuer: string | null; issued_on: string | null;
+  status: string; note: string | null; file_url: string | null; at: string | null };
+
+/** Open a short-lived file link (certificate PDF, uploaded document). */
+export async function openLink(path: string) {
+  const r = await api<{ url: string }>(path, { method: "POST" });
+  const url = `${BASE}${r.url}`;
+  if (!window.open(url, "_blank")) window.location.href = url;
+}

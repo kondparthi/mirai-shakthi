@@ -169,6 +169,53 @@ Staff with no districts set see only the records they enrolled.
    - Keep a copy somewhere safe and **never change it**: bank numbers saved with it cannot be read without it.
    - Photos are stored in `backend/storage/photos`. Include that folder in backups.
 
+## Phase 1, Sprint 2 – Training & certification (M4)
+
+Staff portal → **Training**. Entrepreneur app → Programme → **My training**.
+
+| Who | Can |
+|---|---|
+| Programme Manager / Admin | Courses (curriculum), training partners, everything below |
+| District Coordinator | Plan batches, add trainees, confirm app requests, verify uploaded certificates, follow-ups |
+| Trainer | *My batches* only: sessions, attendance (list or QR), session photos, results |
+| Mentor | Needs assessments and 30 / 90 / 180-day follow-ups for their trainees |
+
+- **Courses** for the six tracks (Awareness EDP, Core EDP, Skill-based, On-the-job, Exposure visit, Refresher). Each course has sessions (English and Telugu), outcomes, pass mark, minimum attendance, a practical checklist, and a business-plan score for Core EDP. Eight starter courses are loaded; MIRAI can edit them.
+- **Batches (Form 4.1)**: course, partner, trainers, mentors, mode, dates, venue or host unit, seats and sponsor (CSR / government / self). Sessions are planned automatically over the dates.
+- **Trainees**:
+  - Staff add people from a list that shows who is *recommended*, based on the readiness check or needs assessment.
+  - Entrepreneurs can also request a seat in an open batch from the app.
+  - Mentors are shared among trainees automatically, as the spec says the mentor is assigned at the EDP.
+- **Attendance (Form 4.2)**:
+  - The trainer ticks names on a phone.
+  - Or the trainer shows a **QR code / 6-digit code** that trainees scan or type to mark themselves present.
+  - Session photos record the location.
+- **Results**:
+  - The system suggests Pass or Re-assess from attendance, quiz, practical checklist and business-plan score.
+  - The trainer decides. **Pass issues the certificate.**
+  - Core EDP graduates move to stage 3 (DPR & finance).
+- **Certificates**:
+  - A PDF in English and Telugu (names in Telugu are drawn correctly) with a QR code and check code.
+  - Anyone (a bank, a CSR partner) can scan it to see that it is genuine at `#/verify`, without logging in.
+- **Uploaded certificates**: DGCA Remote Pilot, FSSAI and partner certificates are uploaded in the app and verified by staff.
+- **Needs assessment (Form 4.3)** on the entrepreneur page suggests tracks from the skill ratings.
+- **Follow-ups (Form 4.5)** at 30, 90 and 180 days after certification are listed for the mentor.
+- **Feedback** (1–5 stars) from trainees feeds the partner rating.
+- **Reports** by course, sponsor and district, plus a trainee-level CSV for sponsors.
+
+### Updating to Phase 1 Sprint 2
+
+1. Copy the changed files over the project.
+2. Back end:
+   - `py -m pip install -r requirements.txt` (adds `segno` for QR codes).
+   - `py -m seed.seed` (new training tables and the starter courses).
+3. Front end: `npm run build`.
+4. Server, once: check that Pillow can shape Telugu.
+   - `python -c "from PIL import features; print(features.check('raqm'))"` must print `True`.
+   - If it prints `False`, run `apt install -y libfribidi0 libraqm0`.
+5. Optional: `PUBLIC_URL` in `.env` (default `https://miraimsme.com`) is the address printed in certificate and check-in QR codes.
+6. Back up `backend/storage/` (photos and uploaded certificates).
+
 ## Run it on your computer
 
 Requirements: Python 3.12+ (3.14 works), Node 20+, MySQL 8. On Windows use `py -m pip …` and `py -m …` so packages and commands use the same Python.

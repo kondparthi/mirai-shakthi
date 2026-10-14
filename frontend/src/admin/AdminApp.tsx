@@ -22,6 +22,13 @@ const ReadinessFormula = lazy(() => import("./settings/ReadinessFormula"));
 const StaffPage = lazy(() => import("./settings/Staff"));
 const Audit = lazy(() => import("./settings/Audit"));
 const DataRequests = lazy(() => import("./settings/DataRequests"));
+const Batches = lazy(() => import("./training/Batches"));
+const BatchDetail = lazy(() => import("./training/BatchDetail"));
+const Courses = lazy(() => import("./training/Courses"));
+const Partners = lazy(() => import("./training/Partners"));
+const FollowUps = lazy(() => import("./training/FollowUps"));
+const TrainingReports = lazy(() => import("./training/Reports"));
+const ExternalQueue = lazy(() => import("./training/Reports").then((m) => ({ default: m.ExternalQueue })));
 
 function AdminLogin() {
   const { signIn } = useAuth();
@@ -67,7 +74,9 @@ function AdminLogin() {
 
 // Menu by role (spec Section 3). Each entry: path, label, icon path, roles that see it.
 type NavItem = [string, string, string, string[]];
-const ALL_READ = ["admin", "programme_manager", "coordinator", "trainer", "dpr_officer", "procurement", "mentor", "sector_expert", "federation_staff"];
+const ALL_READ = ["admin", "programme_manager", "coordinator", "dpr_officer", "procurement", "mentor", "sector_expert", "federation_staff"];
+const TRAIN_READ = [...ALL_READ, "trainer"];
+const MANAGERS = ["admin", "programme_manager"];
 const WRITE = ["admin", "programme_manager", "coordinator", "federation_staff"];
 const AI = ["admin", "reviewer"];
 const NAV: [string, NavItem[]][] = [
@@ -76,6 +85,14 @@ const NAV: [string, NavItem[]][] = [
     ["/admin/entrepreneurs", "Entrepreneurs", "M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm-8 9a8 8 0 0 1 16 0", ALL_READ],
     ["/admin/groups", "Groups", "M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm14 10v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8", ALL_READ],
     ["/admin/import", "Bulk import", "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12", WRITE],
+  ]],
+  ["Training", [
+    ["/admin/training/batches", "Batches", "M22 10v6M2 10l10-5 10 5-10 5zM6 12v5c3 3 9 3 12 0v-5", TRAIN_READ],
+    ["/admin/training/followups", "Follow-ups", "M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z", ["admin", "programme_manager", "coordinator", "mentor"]],
+    ["/admin/training/uploaded", "Uploaded certificates", "M9 12l2 2 4-4M7.8 4.7a3.4 3.4 0 0 0 1.9-.8 3.4 3.4 0 0 1 4.4 0 3.4 3.4 0 0 0 1.9.8 3.4 3.4 0 0 1 3.1 3.1c.1.7.4 1.4.8 1.9a3.4 3.4 0 0 1 0 4.4 3.4 3.4 0 0 0-.8 1.9 3.4 3.4 0 0 1-3.1 3.1 3.4 3.4 0 0 0-1.9.8 3.4 3.4 0 0 1-4.4 0 3.4 3.4 0 0 0-1.9-.8 3.4 3.4 0 0 1-3.1-3.1 3.4 3.4 0 0 0-.8-1.9 3.4 3.4 0 0 1 0-4.4 3.4 3.4 0 0 0 .8-1.9 3.4 3.4 0 0 1 3.1-3.1z", ["admin", "programme_manager", "coordinator"]],
+    ["/admin/training/courses", "Courses", "M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5zM4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5", MANAGERS],
+    ["/admin/training/partners", "Training partners", "M3 21h18M5 21V7l7-4 7 4v14M9 9h1m-1 4h1m-1 4h1m4-8h1m-1 4h1m-1 4h1", MANAGERS],
+    ["/admin/training/reports", "Training reports", "M12 20V10M18 20V4M6 20v-4", TRAIN_READ],
   ]],
   ["AI assistant", [
     ["/admin", "Assistant dashboard", "M22 12h-4l-3 9L9 3l-3 9H2", AI],
@@ -167,6 +184,13 @@ export default function AdminApp() {
           <Route path="/admin/staff" element={route("/admin/staff", <StaffPage />)} />
           <Route path="/admin/audit" element={route("/admin/audit", <Audit />)} />
           <Route path="/admin/data-requests" element={route("/admin/data-requests", <DataRequests />)} />
+          <Route path="/admin/training/batches" element={route("/admin/training/batches", <Batches />)} />
+          <Route path="/admin/training/batches/:id" element={route("/admin/training/batches", <BatchDetail />)} />
+          <Route path="/admin/training/followups" element={route("/admin/training/followups", <FollowUps />)} />
+          <Route path="/admin/training/uploaded" element={route("/admin/training/uploaded", <ExternalQueue />)} />
+          <Route path="/admin/training/courses" element={route("/admin/training/courses", <Courses />)} />
+          <Route path="/admin/training/partners" element={route("/admin/training/partners", <Partners />)} />
+          <Route path="/admin/training/reports" element={route("/admin/training/reports", <TrainingReports />)} />
           <Route path="/admin/welcome" element={<NotYet />} />
           <Route path="*" element={<Navigate to={home} replace />} />
         </Routes>

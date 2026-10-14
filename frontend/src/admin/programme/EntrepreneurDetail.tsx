@@ -6,6 +6,7 @@ import EnrolForm, { type EnrolBody } from "../../components/EnrolForm";
 import { ReadinessForm, ReadinessResult } from "../../components/Readiness";
 import { Modal } from "../ui";
 import { Avatar } from "./Entrepreneurs";
+import EntrepreneurTraining from "../training/EntrepreneurTraining";
 
 const STAGES = ["Enrol & assess", "Train & certify", "DPR & finance", "Set up enterprise", "Sell & deliver", "Track business", "Mentor & resolve", "Grow & sustain"];
 const WRITE = ["admin", "programme_manager", "coordinator", "federation_staff"];
@@ -140,6 +141,8 @@ export default function EntrepreneurDetail() {
           )}
         </div>
       </div>
+
+      <EntrepreneurTraining eid={e.id} />
 
       {modal === "edit" && (
         <Modal title="Edit details" wide onClose={() => setModal(null)}>

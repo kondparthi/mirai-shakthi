@@ -114,6 +114,17 @@ def load_masters(db) -> None:
         db.add(Setting(key="readiness_formula", value=default_formula()))
 
 
+def load_courses(db) -> None:
+    """Phase 1 Sprint 2: starter training courses. Adds only courses that are missing (admin edits are kept)."""
+    from app.models_p2 import Course
+    from seed.data_p2 import COURSES
+
+    have = set(db.scalars(select(Course.code)))
+    for c in COURSES:
+        if c["code"] not in have:
+            db.add(Course(**c))
+
+
 def main(reset: bool = False) -> None:
     ensure_database()
     if reset:
@@ -158,6 +169,7 @@ def main(reset: bool = False) -> None:
         db.flush()
         load_telugu(db)
         load_masters(db)
+        load_courses(db)
         # Demo portal login for one sample expert (screen E1). Change or remove before go-live.
         demo = db.scalar(select(Expert).where(Expert.name == "Sample CA – Guntur"))
         demo_email = os.getenv("DEMO_EXPERT_EMAIL", "ca.guntur@mirai.local")

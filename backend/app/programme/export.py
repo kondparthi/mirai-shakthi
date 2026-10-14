@@ -30,6 +30,12 @@ def person_export(db: Session, user: User) -> dict:
         out["readiness_assessments"] = [
             {"at": _iso(a.created_at), "score": a.score, "strengths": a.strengths, "gaps": a.gaps, "recommended": a.recommended,
              "answers": a.answers} for a in e.assessments]
+        from ..models_p2 import ExternalCertificate, Trainee
+        out["training"] = [{"course": t.batch.course.name_en, "batch": t.batch.code, "dates": f"{t.batch.start_date} – {t.batch.end_date}",
+                            "status": t.status, "result": t.result, "certificate_no": t.certificate_no, "feedback": t.feedback_rating}
+                           for t in db.scalars(select(Trainee).where(Trainee.entrepreneur_id == e.id))]
+        out["external_certificates"] = [{"title": x.title, "number": x.number, "issuer": x.issuer, "status": x.status}
+                                        for x in db.scalars(select(ExternalCertificate).where(ExternalCertificate.entrepreneur_id == e.id))]
         out["groups"] = [{"group": gm.group.name, "role": gm.role, "contribution": gm.contribution}
                          for gm in db.scalars(select(GroupMember).where(GroupMember.entrepreneur_id == e.id))]
     sessions = list(db.scalars(select(GuidanceSession).where(GuidanceSession.user_id == user.id).order_by(GuidanceSession.id)))

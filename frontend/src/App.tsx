@@ -1,5 +1,5 @@
 import { lazy, Suspense, useEffect } from "react";
-import { Navigate, NavLink, Route, Routes, useLocation } from "react-router-dom";
+import { Navigate, NavLink, Route, Routes, useLocation, useParams } from "react-router-dom";
 import { useAuth } from "./auth";
 import Logo from "./components/Logo";
 import { useLang } from "./i18n";
@@ -18,6 +18,14 @@ const ProfilePage = lazy(() => import("./pages/Profile"));
 const Landing = lazy(() => import("./pages/Landing"));
 const Programme = lazy(() => import("./pages/Programme"));
 const MyData = lazy(() => import("./pages/MyData"));
+const Training = lazy(() => import("./pages/Training"));
+const Checkin = lazy(() => import("./pages/Training").then((m) => ({ default: m.Checkin })));
+const Verify = lazy(() => import("./pages/Verify"));
+
+function CheckinRoute() {
+  const { token = "" } = useParams();
+  return <Checkin token={token} />;
+}
 const RequestList = lazy(() => import("./pages/Requests").then((m) => ({ default: m.RequestList })));
 const RequestDetail = lazy(() => import("./pages/Requests").then((m) => ({ default: m.RequestDetail })));
 
@@ -88,17 +96,22 @@ export default function App() {
     document.documentElement.lang = lang;
   }, [lang]);
 
+  // Public certificate check (QR on certificates) – no login needed.
+  if (location.pathname.startsWith("/verify")) return (
+    <Suspense fallback={<Loading />}><Routes><Route path="/verify/:number?" element={<Verify />} /></Routes></Suspense>
+  );
   if (loading) return <div className="login muted">Loading…</div>;
   // Admin portal lives at #/admin and has its own staff login.
   if (location.pathname.startsWith("/admin")) return <Suspense fallback={<Loading />}><AdminApp /></Suspense>;
   // Expert workspace lives at #/expert and uses the same staff login.
   if (location.pathname.startsWith("/expert")) return <Suspense fallback={<Loading />}><ExpertApp /></Suspense>;
   // Visitors see the landing page; Register / Log in open the mobile + OTP screen at #/login.
-  if (!user) return location.pathname.startsWith("/login") ? <Login /> : <Suspense fallback={<Loading />}><Landing /></Suspense>;
+  // A training check-in QR opened while logged out: log in first, then the check-in completes on the same address.
+  if (!user) return location.pathname.startsWith("/login") || location.pathname.startsWith("/checkin") ? <Login /> : <Suspense fallback={<Loading />}><Landing /></Suspense>;
   if (user.role === "expert") return <Navigate to="/expert" replace />;
   if (user.role !== "msme") return <Navigate to="/admin" replace />;
   // The business profile is needed for guidance; the programme enrolment has its own form, so it is reachable without it.
-  const noProfileOk = ["/profile", "/programme", "/my-data"].includes(location.pathname);
+  const noProfileOk = ["/profile", "/programme", "/my-data", "/training", "/checkin"].some((p) => location.pathname.startsWith(p));
   if (!user.has_profile && !noProfileOk) return <Navigate to="/profile" replace />;
 
   return (
@@ -117,6 +130,8 @@ export default function App() {
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/programme" element={<Programme />} />
         <Route path="/my-data" element={<MyData />} />
+        <Route path="/training" element={<Training />} />
+        <Route path="/checkin/:token" element={<CheckinRoute />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
       </Suspense>
