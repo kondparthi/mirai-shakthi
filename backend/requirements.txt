@@ -1,0 +1,19 @@
+# Tested on Python 3.12–3.14. SQLAlchemy 2.0.41+ is required for Python 3.14.
+fastapi>=0.143
+uvicorn[standard]>=0.30
+sqlalchemy>=2.0.41,<2.1
+pymysql>=1.1
+cryptography>=42
+pydantic>=2.7
+python-jose[cryptography]>=3.3
+bcrypt>=4.1
+python-dotenv>=1.0
+httpx>=0.27
+anthropic>=0.40
+reportlab>=4.0
+# Sprint 5 – bank statement upload (MicroFin)
+python-multipart>=0.0.9
+openpyxl>=3.1
+xlrd>=2.0
+pdfplumber>=0.11
+pytest>=8

@@ -1,0 +1,9 @@
+**/node_modules/
+frontend/dist/
+backend/.env
+backend/.venv/
+**/__pycache__/
+.pytest_cache/
+frontend/android/app/build/
+frontend/android/.gradle/
+*.log

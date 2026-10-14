@@ -1,0 +1,15 @@
+# /etc/systemd/system/mirai-api.service  – runs the FastAPI backend
+[Unit]
+Description=MIRAI Shakthi API
+After=network.target mysql.service
+
+[Service]
+User=mirai
+WorkingDirectory=/opt/mirai-shakthi/backend
+EnvironmentFile=/opt/mirai-shakthi/backend/.env
+ExecStart=/opt/mirai-shakthi/backend/.venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 8000 --workers 2
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target
