@@ -363,3 +363,12 @@ h3 { font-size: 15px; margin: 0 0 6px; }
 .statement .table-wrap { background: #fff; border-radius: 10px; border: 1px solid var(--line); }
 .examples { margin: 6px 0 0; padding-left: 18px; overflow-wrap: anywhere; }
 .examples li { margin-bottom: 4px; }
+
+/* ---- Brand logo (landing page, login, app top bar) ---- */
+.logo { display: inline-flex; align-items: center; gap: 0.45em; font-family: "Anek Latin Variable", "Anek Telugu Variable", "Noto Sans", sans-serif;
+  font-weight: 700; line-height: 1; letter-spacing: -0.01em; white-space: nowrap; }
+.logo-mark { flex: none; filter: drop-shadow(0 4px 10px rgba(10, 58, 44, 0.25)); }
+.logo-word b { font-weight: 800; }
+.logo-dark { color: #0a3a2c; } .logo-dark b { color: #13714f; }
+.logo-light { color: #fff; } .logo-light b { color: #ffc85a; }
+.topbar .brand .logo { font-size: 19px; }

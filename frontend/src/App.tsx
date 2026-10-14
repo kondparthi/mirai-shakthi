@@ -1,6 +1,7 @@
 import { lazy, Suspense, useEffect } from "react";
 import { Navigate, NavLink, Route, Routes, useLocation } from "react-router-dom";
 import { useAuth } from "./auth";
+import Logo from "./components/Logo";
 import { useLang } from "./i18n";
 import Chat from "./pages/Chat";
 import Home from "./pages/Home";
@@ -14,6 +15,7 @@ const Documents = lazy(() => import("./pages/Documents"));
 const History = lazy(() => import("./pages/History"));
 const JdTool = lazy(() => import("./pages/JdTool"));
 const ProfilePage = lazy(() => import("./pages/Profile"));
+const Landing = lazy(() => import("./pages/Landing"));
 const RequestList = lazy(() => import("./pages/Requests").then((m) => ({ default: m.RequestList })));
 const RequestDetail = lazy(() => import("./pages/Requests").then((m) => ({ default: m.RequestDetail })));
 
@@ -41,8 +43,7 @@ function Shell({ children }: { children: React.ReactNode }) {
     <div className="shell">
       <header className="topbar">
         <div className="brand">
-          {t("appName")}
-          <small>{t("appSub")}</small>
+          <Logo tone="light" size={32} />
         </div>
         <div className="spacer" />
         <LangToggle />
@@ -90,7 +91,8 @@ export default function App() {
   if (location.pathname.startsWith("/admin")) return <Suspense fallback={<Loading />}><AdminApp /></Suspense>;
   // Expert workspace lives at #/expert and uses the same staff login.
   if (location.pathname.startsWith("/expert")) return <Suspense fallback={<Loading />}><ExpertApp /></Suspense>;
-  if (!user) return <Login />;
+  // Visitors see the landing page; Register / Log in open the mobile + OTP screen at #/login.
+  if (!user) return location.pathname.startsWith("/login") ? <Login /> : <Suspense fallback={<Loading />}><Landing /></Suspense>;
   if (user.role === "expert") return <Navigate to="/expert" replace />;
   if (user.role !== "msme") return <Navigate to="/admin" replace />;
   if (!user.has_profile && location.pathname !== "/profile") return <Navigate to="/profile" replace />;

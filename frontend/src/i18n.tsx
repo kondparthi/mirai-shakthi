@@ -220,6 +220,11 @@ const STRINGS = {
   stmtApplied: { en: "Figures filled from your bank statement. Open each month to check them, then make the summary.", te: "బ్యాంకు స్టేట్‌మెంట్ నుండి అంకెలు నింపాం. ప్రతి నెల తెరిచి చూసుకుని, సారాంశం తయారు చేయండి." },
   namaste: { en: "Namaste", te: "నమస్తే" },
   appSub: { en: "MSME AI Guidance", te: "ఎంఎస్ఎంఈ ఏఐ మార్గదర్శి" },
+  // Landing page / login titles
+  backHome: { en: "Home", te: "హోమ్" },
+  createAccount: { en: "Create your account", te: "మీ ఖాతా తెరవండి" },
+  loginTitle: { en: "Log in", te: "లాగిన్" },
+  loginHint: { en: "Enter your mobile number. New numbers get a new account; existing users are logged in.", te: "మీ మొబైల్ నంబర్ ఇవ్వండి. కొత్త నంబర్‌కు కొత్త ఖాతా తెరుచుకుంటుంది; ఉన్నవారు లాగిన్ అవుతారు." },
 } as const;
 
 export type StringKey = keyof typeof STRINGS;

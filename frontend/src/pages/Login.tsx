@@ -1,12 +1,15 @@
 import { useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import { api, type User } from "../api";
 import { LangToggle } from "../App";
 import { useAuth } from "../auth";
+import Logo from "../components/Logo";
 import { useLang } from "../i18n";
 
 export default function Login() {
   const { t, lang } = useLang();
   const { signIn } = useAuth();
+  const isNew = useSearchParams()[0].get("new") === "1";
   const [mobile, setMobile] = useState("");
   const [code, setCode] = useState("");
   const [consent, setConsent] = useState(false);
@@ -46,14 +49,17 @@ export default function Login() {
 
   return (
     <div className="login">
-      <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 12 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+        <Link to="/" className="small">← {t("backHome")}</Link>
         <div style={{ background: "var(--green-800)", borderRadius: 999 }}>
           <LangToggle />
         </div>
       </div>
       <div className="hero">
-        <h1>{t("appName")}</h1>
+        <h1 style={{ margin: 0 }}><Logo size={46} /></h1>
         <p className="muted">{t("tagline")}</p>
+        <h2 style={{ margin: "16px 0 0", fontSize: 20 }}>{isNew ? t("createAccount") : t("loginTitle")}</h2>
+        <p className="small muted" style={{ margin: "4px 0 0" }}>{t("loginHint")}</p>
       </div>
       {stage === "mobile" ? (
         <form className="card stack" onSubmit={requestOtp}>

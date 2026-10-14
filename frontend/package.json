@@ -12,8 +12,11 @@
     "@capacitor-community/speech-recognition": "^7.0.1",
     "@capacitor/android": "^7.6.9",
     "@capacitor/core": "^7.6.9",
+    "@fontsource-variable/anek-latin": "^5.3.0",
+    "@fontsource-variable/anek-telugu": "^5.3.0",
     "@fontsource/noto-sans": "^5.3.0",
     "@fontsource/noto-sans-telugu": "^5.3.0",
+    "lucide-react": "^1.57.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.30.6"
