@@ -1,6 +1,7 @@
 """M4 – EDP & skill-based training for staff: courses, partners, batches (Form 4.1), attendance and assessment
 (Form 4.2), needs assessment (4.3), partners (4.4), follow-ups (4.5), certificates and reports."""
 import csv
+import datetime as dt
 import io
 import re
 import secrets
@@ -451,7 +452,7 @@ def _session(db: Session, user: User, sid: int) -> tuple[BatchSession, Batch]:
 
 
 class SessionEdit(BaseModel):
-    date: Optional[date] = None
+    date: Optional[dt.date] = None  # dt.date: a field named "date" would hide the type
     topic: str = Field(min_length=2, max_length=200)
     hours: Optional[float] = Field(default=None, ge=0, le=24)
 

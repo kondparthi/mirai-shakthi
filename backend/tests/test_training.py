@@ -188,3 +188,10 @@ def test_needs_assessment_and_external_certificates(client):
     assert client.post(f"/api/v1/training/external-certificates/{xid}/verify", headers=coord, json={"status": "verified"}).json()["status"] == "verified"
     summary = client.get(f"/api/v1/training/entrepreneurs/{eid}", headers=coord).json()
     assert summary["external"][0]["status"] == "verified" and summary["needs"][0]["enterprise_model"] == "Drone spraying service"
+
+
+def test_session_edit_accepts_a_date():
+    """A field named "date" must not hide the date type (Pydantic would then accept only None)."""
+    from app.routers.training import SessionEdit
+
+    assert SessionEdit(date="2026-11-03", topic="Costing").date.isoformat() == "2026-11-03"

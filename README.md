@@ -274,6 +274,35 @@ Staff portal → **Enterprise set-up**. Supplier portal → **#/supplier**. Entr
 2. Back up `backend/storage/setup` (quotation files, installation photos, registration documents).
 3. Create supplier portal logins from Enterprise set-up → Suppliers → key icon. Suppliers sign in at `https://<your site>/#/supplier`.
 
+## Phase 1, Sprint 5 – Marketing, sales & orders (M8)
+
+Entrepreneur app → **My shop & sales** (from stage 5). Staff portal → **Sales & marketing**, and Units → *Shop & orders*.
+Customers use the **public shop** `#/shop/<unit code>` and the **order tracking** link – no login.
+
+| Who | Can |
+|---|---|
+| Entrepreneur (their own or their group's unit) | Products & services, sales and orders, bookings, customers and follow-ups, posters and messages, answer buyer enquiries |
+| Coordinator, Programme Manager, Admin, SHG Federation staff, Mentor | The same for units in their districts (to help), buyer enquiries, campaigns |
+| Other programme staff | See shops, sales and reports in their districts |
+| Customer | Order or book on the shop page, follow the order, rate it |
+
+- **Customers** are kept separately from entrepreneurs (spec 2.2): one profile per mobile number, shared by every unit they buy from.
+- **Products & services (Form 8.1)**: start from the business plan's products and DPR prices, add photos (up to 3), price per unit, availability, a daily limit and, for services, time slots with capacity (e.g. drone spraying 20 acres a slot, lunch tiffins 40 plates).
+- **Orders & bookings (Form 8.2)**: quick sale on the phone (tap quantities, mobile number fills the name for known customers), status New → Confirmed → Delivered → Paid / Cancelled, cash / UPI / credit. Credit sales show as *money to collect* until paid. Bookings check the slot capacity. Online orders arrive as *New*.
+- **Public shop and tracking**: launched units only, Telugu / English, shop prices only (the customer cannot change them), at most 5 online orders a day per mobile number. The customer gets a tracking link and can rate the order after delivery; ratings show on the shop.
+- **Repeat-customer follow-ups**: customers who bought before and have not ordered for 14 days, with a ready WhatsApp message; *Done* hides them until their next order.
+- **Posters and messages**: a 1080 × 1350 poster (PNG, with a QR code to the shop) and a WhatsApp message in Telugu or English, made from the unit's real products and prices. With an AI key the AI writes the words; otherwise a template does. Prices print as "రూ." / "Rs." on the poster.
+- **Buyer enquiries**: staff record enquiries from schools, offices, hostels, caterers and market partners, see matching launched units (same district first, with ratings) and send the enquiry to them. The unit answers in the app (interested with a price, or not now); the buyer's number is shown to the unit once it is interested. "Buyer agreed – make order" creates the order; the enquiry is won and the other units are told it is closed.
+- **Campaigns (Form 8.3)**: fairs, festivals, WhatsApp and institutional drives across units; units tag sales made at the campaign; results (enquiries, orders, sales) count automatically, plus numbers entered by hand for sales outside the app; a campaign message drafted from the units' products; materials upload.
+- **Sales dashboard**: sales this month, units selling, credit to collect, customers and repeat %, rating, weekly sales, top units, sales by model, where orders come from, launched units with no sales yet.
+- Fix: editing a training session's date (Sprint 2) now saves the date.
+
+### Updating to Phase 1 Sprint 5
+
+1. Copy the changed files over the project, `git push`, then `mirai-update` on the server (new tables; no new packages).
+2. Back up `backend/storage/market` (product photos, posters, campaign materials).
+3. `PUBLIC_URL` in `.env` must be the site address (e.g. `https://miraimsme.com`) – it is used in shop links, tracking links and poster QR codes.
+
 ## Run it on your computer
 
 Requirements: Python 3.12+ (3.14 works), Node 20+, MySQL 8. On Windows use `py -m pip …` and `py -m …` so packages and commands use the same Python.

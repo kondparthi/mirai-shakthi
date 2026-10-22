@@ -1,6 +1,6 @@
 import { lazy, Suspense, useState } from "react";
 import {
-  Activity, BadgeCheck, BadgeIndianRupee, BookOpen, Boxes, Factory, FileSpreadsheet, HandCoins, Store, Wrench, Building2, ChartColumn, Database, ExternalLink, GraduationCap, KeyRound, Landmark, LayoutDashboard, Library,
+  Activity, BadgeCheck, BadgeIndianRupee, BookOpen, Boxes, Factory, FileSpreadsheet, HandCoins, Megaphone, ShoppingCart, Store, Wrench, Building2, ChartColumn, Database, ExternalLink, GraduationCap, KeyRound, Landmark, LayoutDashboard, Library,
   ListChecks, Menu, MessagesSquare, PhoneCall, ScrollText, ShieldCheck, SlidersHorizontal, TriangleAlert, Upload, UserRound, Users as UsersIcon, UsersRound,
   type LucideIcon,
 } from "lucide-react";
@@ -48,6 +48,10 @@ const Units = lazy(() => import("./setup/Units"));
 const UnitDetail = lazy(() => import("./setup/UnitDetail"));
 const PurchaseDetail = lazy(() => import("./setup/PurchaseDetail"));
 const Suppliers = lazy(() => import("./setup/Suppliers"));
+const SalesDashboard = lazy(() => import("./market/SalesDashboard"));
+const Enquiries = lazy(() => import("./market/Enquiries"));
+const Campaigns = lazy(() => import("./market/Campaigns"));
+const UnitShop = lazy(() => import("./market/UnitShop"));
 
 function AdminLogin() {
   const { signIn } = useAuth();
@@ -126,6 +130,11 @@ const NAV: [string, NavItem[]][] = [
     ["/admin/setup/units", "Units", Wrench, ALL_READ],
     ["/admin/setup/suppliers", "Suppliers", Store, ALL_READ],
   ]],
+  ["Sales & marketing", [
+    ["/admin/market", "Sales dashboard", ShoppingCart, ALL_READ],
+    ["/admin/market/enquiries", "Buyer enquiries", MessagesSquare, ALL_READ],
+    ["/admin/market/campaigns", "Campaigns", Megaphone, ALL_READ],
+  ]],
   ["AI assistant", [
     ["/admin", "Assistant dashboard", Activity, AI],
     ["/admin/review", "Answer review", TriangleAlert, AI],
@@ -188,7 +197,7 @@ export default function AdminApp() {
             <div key={title} className="nav-group">
               <div className="nav-title">{title}</div>
               {items.map(([to, label, Icon]) => (
-                <NavLink key={to} to={to} end={to === "/admin" || to === "/admin/finance" || to === "/admin/setup"}>
+                <NavLink key={to} to={to} end={["/admin", "/admin/finance", "/admin/setup", "/admin/market"].includes(to)}>
                   <Icon aria-hidden="true" strokeWidth={1.9} />
                   {label}
                 </NavLink>
@@ -248,6 +257,10 @@ export default function AdminApp() {
           <Route path="/admin/setup/units/:id" element={route("/admin/setup/units", <UnitDetail />)} />
           <Route path="/admin/setup/units/purchase/:id" element={route("/admin/setup/units", <PurchaseDetail />)} />
           <Route path="/admin/setup/suppliers" element={route("/admin/setup/suppliers", <Suppliers />)} />
+          <Route path="/admin/market" element={route("/admin/market", <SalesDashboard />)} />
+          <Route path="/admin/market/enquiries" element={route("/admin/market/enquiries", <Enquiries />)} />
+          <Route path="/admin/market/campaigns" element={route("/admin/market/campaigns", <Campaigns />)} />
+          <Route path="/admin/market/units/:id" element={route("/admin/market", <UnitShop />)} />
           <Route path="/admin/welcome" element={<NotYet />} />
           <Route path="*" element={<Navigate to={home} replace />} />
         </Routes>

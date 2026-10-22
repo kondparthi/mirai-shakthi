@@ -45,10 +45,14 @@ def person_export(db: Session, user: User) -> dict:
                                                                            "paid_on": _iso(r.paid_on)} for r in a.repayments]}
                                     for a in db.scalars(select(LoanApplication).where(LoanApplication.entrepreneur_id == e.id))]
         from ..models_p4 import Unit
+        from ..models_p5 import Order
         out["enterprise_units"] = [{"code": u.code, "name": u.name, "status": u.status, "launch_date": _iso(u.launch_date),
                                     "assets": [{"item": a.item, "serial_no": a.serial_no, "value": a.value} for a in u.assets],
                                     "registrations": [{"kind": r.kind, "status": r.status, "number": r.number} for r in u.registrations]}
                                    for u in db.scalars(select(Unit).where(Unit.entrepreneur_id == e.id))]
+        out["enterprise_sales"] = [{"unit": u.code, "orders": len(u_orders), "sales": round(sum(o.amount for o in u_orders if o.status in ("delivered", "paid")), 2)}
+                                   for u in db.scalars(select(Unit).where(Unit.entrepreneur_id == e.id))
+                                   for u_orders in [list(db.scalars(select(Order).where(Order.unit_id == u.id)))]]
         out["groups"] = [{"group": gm.group.name, "role": gm.role, "contribution": gm.contribution}
                          for gm in db.scalars(select(GroupMember).where(GroupMember.entrepreneur_id == e.id))]
     sessions = list(db.scalars(select(GuidanceSession).where(GuidanceSession.user_id == user.id).order_by(GuidanceSession.id)))
