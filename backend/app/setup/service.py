@@ -48,6 +48,9 @@ def owner(u: Unit):
 def can_see_unit(user: User, u: Unit) -> bool:
     if user.role in ALL_SCOPE:
         return True
+    ms = getattr(u, "mentorship", None)  # Sprint 7: a mentor sees the units they mentor
+    if ms is not None and ms.mentor_id == user.id:
+        return True
     o = owner(u)
     if o is not None and can_see(user, o):
         return True
@@ -107,6 +110,9 @@ def ensure_unit(db: Session, d: Dpr, user: User | None) -> Unit:
             r.status, r.number, r.issued_on, r.note = "done", ext.number, ext.issued_on, "Verified certificate from training"
         db.add(r)
     db.flush()
+    from ..mentoring.service import ensure_mentorship  # Sprint 7: mentor from training, assigned when the unit is created
+
+    ensure_mentorship(db, u, user)
     return u
 
 

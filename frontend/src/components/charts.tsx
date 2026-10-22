@@ -56,7 +56,7 @@ export function HBars({ rows, empty = "No data yet.", format = (v: number) => v.
 }
 
 /** Donut for parts of a whole (≤ 5 parts). Legend with values is always shown; hovering a part shows it in the middle. */
-export function Donut({ slices, centerLabel, size = 168 }: { slices: { key: string; label: string; value: number }[]; centerLabel: string; size?: number }) {
+export function Donut({ slices, centerLabel, size = 168 }: { slices: { key: string; label: string; value: number; color?: string }[]; centerLabel: string; size?: number }) {
   const [hover, setHover] = useState<number | null>(null);
   const total = slices.reduce((a, s) => a + s.value, 0);
   const r = 62, c = 2 * Math.PI * r, gap = total && slices.filter((s) => s.value).length > 1 ? 2.2 : 0;
@@ -69,7 +69,7 @@ export function Donut({ slices, centerLabel, size = 168 }: { slices: { key: stri
         {total > 0 && slices.map((s, i) => {
           const len = (c * s.value) / total;
           const el = s.value > 0 && (
-            <circle key={s.key} cx="80" cy="80" r={r} fill="none" stroke={SERIES[i]} strokeWidth={hover === i ? 22 : 18}
+            <circle key={s.key} cx="80" cy="80" r={r} fill="none" stroke={(s.color ?? SERIES[i])} strokeWidth={hover === i ? 22 : 18}
               strokeDasharray={`${Math.max(0, len - gap)} ${c}`} strokeDashoffset={-acc} transform="rotate(-90 80 80)"
               onMouseEnter={() => setHover(i)} onMouseLeave={() => setHover(null)} style={{ transition: "stroke-width .15s" }} />
           );
@@ -82,7 +82,7 @@ export function Donut({ slices, centerLabel, size = 168 }: { slices: { key: stri
       <ul className="legend">
         {slices.map((s, i) => (
           <li key={s.key} onMouseEnter={() => setHover(i)} onMouseLeave={() => setHover(null)} className={hover === i ? "on" : ""}>
-            <span className="sw" style={{ background: SERIES[i] }} />
+            <span className="sw" style={{ background: (s.color ?? SERIES[i]) }} />
             <span className="lg-label">{s.label}</span>
             <b>{s.value}</b>
           </li>

@@ -1,7 +1,7 @@
 import { lazy, Suspense, useEffect } from "react";
 import { Navigate, NavLink, Route, Routes, useLocation, useParams } from "react-router-dom";
 import { useAuth } from "./auth";
-import { Factory, GraduationCap, Landmark, NotebookPen, ShieldCheck, Sprout, Store, UserRound } from "lucide-react";
+import { Factory, GraduationCap, HeartHandshake, Landmark, NotebookPen, ShieldCheck, Sprout, Store, UserRound } from "lucide-react";
 import Logo from "./components/Logo";
 import UserMenu from "./components/UserMenu";
 import { useLang } from "./i18n";
@@ -28,6 +28,7 @@ const MyUnit = lazy(() => import("./pages/MyUnit"));
 const SupplierApp = lazy(() => import("./supplier/SupplierApp"));
 const MyShop = lazy(() => import("./pages/MyShop"));
 const MyBooks = lazy(() => import("./pages/MyBooks"));
+const MyMentor = lazy(() => import("./pages/MyMentor"));
 const PublicShop = lazy(() => import("./pages/Shop"));
 const Track = lazy(() => import("./pages/Track"));
 
@@ -76,6 +77,7 @@ function Shell({ children }: { children: React.ReactNode }) {
             <NavLink role="menuitem" to="/business-plan"><Landmark aria-hidden="true" />{lang === "te" ? "వ్యాపార ప్రణాళిక & రుణం" : "Business plan & loan"}</NavLink>
             <NavLink role="menuitem" to="/my-shop"><Store aria-hidden="true" />{lang === "te" ? "నా షాప్ & అమ్మకాలు" : "My shop & sales"}</NavLink>
             <NavLink role="menuitem" to="/my-books"><NotebookPen aria-hidden="true" />{lang === "te" ? "నా లెక్కలు" : "My accounts"}</NavLink>
+            <NavLink role="menuitem" to="/my-mentor"><HeartHandshake aria-hidden="true" />{lang === "te" ? "నా మెంటార్ & సహాయం" : "My mentor & support"}</NavLink>
             <NavLink role="menuitem" to="/my-unit"><Factory aria-hidden="true" />{lang === "te" ? "నా వ్యాపారం ఏర్పాటు" : "My enterprise set-up"}</NavLink>
             <NavLink role="menuitem" to="/my-data"><ShieldCheck aria-hidden="true" />{t("myDataLink")}</NavLink>
           </>} />
@@ -140,7 +142,7 @@ export default function App() {
   if (user.role === "supplier") return <Navigate to="/supplier" replace />;
   if (user.role !== "msme") return <Navigate to="/admin" replace />;
   // The business profile is needed for guidance; the programme enrolment has its own form, so it is reachable without it.
-  const noProfileOk = ["/profile", "/programme", "/my-data", "/training", "/checkin", "/business-plan", "/my-unit", "/my-shop", "/my-books"].some((p) => location.pathname.startsWith(p));
+  const noProfileOk = ["/profile", "/programme", "/my-data", "/training", "/checkin", "/business-plan", "/my-unit", "/my-shop", "/my-books", "/my-mentor"].some((p) => location.pathname.startsWith(p));
   if (!user.has_profile && !noProfileOk) return <Navigate to="/profile" replace />;
 
   return (
@@ -164,6 +166,7 @@ export default function App() {
         <Route path="/my-unit" element={<MyUnit />} />
         <Route path="/my-shop" element={<MyShop />} />
         <Route path="/my-books" element={<MyBooks />} />
+        <Route path="/my-mentor" element={<MyMentor />} />
         <Route path="/checkin/:token" element={<CheckinRoute />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

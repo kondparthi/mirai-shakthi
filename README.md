@@ -332,6 +332,36 @@ Entrepreneur app → **My accounts** (from stage 4, so bookkeeping can start bef
 1. Copy the changed files over the project, `git push`, then `mirai-update` on the server (new tables and columns; no new packages).
 2. Units still setting up need one entry in *My accounts* before launch (bookkeeping is now an automatic readiness item).
 
+## Phase 1, Sprint 7 – Mentoring & two-year handholding (M10)
+
+Staff portal → **Mentoring & support** (Caseload, Support tickets, Peer cohorts, Mentoring dashboard), and Units → *Mentoring*.
+Entrepreneur app → **My mentor & support** (from stage 4).
+
+| Who | Can |
+|---|---|
+| Mentor | Their own units: monthly reviews, field visits, growth plans, tickets; peer sessions for their batches |
+| Coordinator, Programme Manager, Admin | The same for units in their districts; assign / change mentors; close handholding; supervise and pass on tickets |
+| Staff a ticket is assigned or referred to (procurement, DPR officer, sector expert …) | Work and resolve that ticket |
+| Entrepreneur | See their mentor (call / WhatsApp), tick agreed actions, ask for help, confirm a fix and rate it |
+
+- **Mentor assignment**: every unit gets a mentorship when it is created; the mentor from the person's training batch (Core EDP) is carried over. Coordinators assign or change the mentor; the history is kept. Mentors see the units they mentor even outside their districts.
+- **24-month timeline** from the launch date, coloured by each month's review health, with visit markers.
+- **What the mentor knows from before**: training results, skill gaps, readiness score and gaps, and the business plan (expected sales, loan, EMI).
+- **Monthly review (Form 10.1)**: sales and expenses pulled from the books (M9) – the mentor can correct them (marked as corrected); loan repayment status; jobs (family / hired); Green / Amber / Red; scores 1–5; issues; actions with due dates (open actions carry over); training needed (refresher / advanced / skill upgrade – listed on the dashboard for the training team). A red rating needs at least one action. Saving marks the M9 monthly summary as reviewed.
+- **Field visits** with geo-tagged photos: the phone's location when allowed, else the location the camera wrote into the photo; distance from the unit is shown.
+- **Support tickets (Form 10.2)** from the app (type or speak, add a photo), a call, the navigator or the mentor. Assigned automatically by category to staff covering the district (equipment → procurement, finance → DPR officer, market / registration → coordinator, technical → sector expert, other → mentor), with the fewest open tickets; due in 2 / 5 / 10 days by priority. Referrals to sector experts, BDSPs, CA / CS, banks, suppliers. The entrepreneur confirms the fix with a rating or re-opens it; resolved tickets close themselves after 7 days. Resolution time is reported.
+- **Growth plans (Form 10.3)**: goal, target and date, support needed, progress notes, achieved / dropped.
+- **Peer cohorts**: monthly mentor-led sessions for each training batch, with attendance.
+- **Final assessment** in the last two months (or when a unit closes): outcome, score, jobs, note; first-3 vs last-3 months' sales are recorded.
+- **Lifecycle**: first review → stage 7 (Mentor & resolve); first growth plan or final assessment → stage 8 (Grow & sustain).
+- Staff logins have an optional **phone** (Settings → Staff) – shown to entrepreneurs for their mentor.
+- The person's data export includes their support tickets and growth plans.
+
+### Updating to Phase 1 Sprint 7
+
+1. Copy the changed files over the project, `git push`, then `mirai-update` on the server (new tables; existing units get their mentorship during the seed; no new packages).
+2. Add each mentor's phone number in Settings → Staff, and assign mentors to launched units from the Caseload (filter "Without a mentor").
+
 ## Run it on your computer
 
 Requirements: Python 3.12+ (3.14 works), Node 20+, MySQL 8. On Windows use `py -m pip …` and `py -m …` so packages and commands use the same Python.

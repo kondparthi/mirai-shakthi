@@ -171,6 +171,18 @@ def load_books(db) -> None:
             m.stock_template = extra["stock_template"]
 
 
+def load_mentoring(db) -> None:
+    """Phase 1 Sprint 7: every unit made before mentoring existed gets its mentorship (mentor from training, if any)."""
+    from app.mentoring.service import ensure_mentorship
+    from app.models_p4 import Unit
+    from app.models_p7 import Mentorship
+
+    have = set(db.scalars(select(Mentorship.unit_id)))
+    for u in db.scalars(select(Unit)):
+        if u.id not in have:
+            ensure_mentorship(db, u)
+
+
 def main(reset: bool = False) -> None:
     ensure_database()
     if reset:
@@ -220,6 +232,7 @@ def main(reset: bool = False) -> None:
         db.flush()
         load_setup(db)
         load_books(db)
+        load_mentoring(db)
         # Demo portal login for one sample expert (screen E1). Change or remove before go-live.
         demo = db.scalar(select(Expert).where(Expert.name == "Sample CA – Guntur"))
         demo_email = os.getenv("DEMO_EXPERT_EMAIL", "ca.guntur@mirai.local")

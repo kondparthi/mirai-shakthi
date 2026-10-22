@@ -2,7 +2,7 @@ import { lazy, Suspense, useState } from "react";
 import {
   Activity, BadgeCheck, BadgeIndianRupee, BookOpen, Boxes, Factory, FileSpreadsheet, HandCoins, Megaphone, ShoppingCart, Store, Wrench, Building2, ChartColumn, Database, ExternalLink, GraduationCap, KeyRound, Landmark, LayoutDashboard, Library,
   ListChecks, Menu, MessagesSquare, PhoneCall, ScrollText, ShieldCheck, SlidersHorizontal, TriangleAlert, Upload, UserRound, Users as UsersIcon, UsersRound,
-  NotebookPen, type LucideIcon,
+  NotebookPen, HeartHandshake, HeartPulse, LifeBuoy, type LucideIcon,
 } from "lucide-react";
 import { Navigate, NavLink, Route, Routes, useLocation } from "react-router-dom";
 import { api, type User } from "../api";
@@ -54,6 +54,11 @@ const Campaigns = lazy(() => import("./market/Campaigns"));
 const UnitShop = lazy(() => import("./market/UnitShop"));
 const BusinessTracking = lazy(() => import("./books/BusinessTracking"));
 const UnitBooks = lazy(() => import("./books/UnitBooks"));
+const Caseload = lazy(() => import("./mentoring/Caseload"));
+const UnitMentoring = lazy(() => import("./mentoring/UnitMentoring"));
+const Tickets = lazy(() => import("./mentoring/Tickets"));
+const PeerSessions = lazy(() => import("./mentoring/PeerSessions"));
+const MentoringDashboard = lazy(() => import("./mentoring/MentoringDashboard"));
 
 function AdminLogin() {
   const { signIn } = useAuth();
@@ -138,6 +143,12 @@ const NAV: [string, NavItem[]][] = [
     ["/admin/market/campaigns", "Campaigns", Megaphone, ALL_READ],
     ["/admin/books", "Business tracking", NotebookPen, ALL_READ],
   ]],
+  ["Mentoring & support", [
+    ["/admin/mentoring", "Caseload", HeartHandshake, ALL_READ],
+    ["/admin/mentoring/tickets", "Support tickets", LifeBuoy, ALL_READ],
+    ["/admin/mentoring/peers", "Peer cohorts", UsersRound, ["admin", "programme_manager", "coordinator", "mentor"]],
+    ["/admin/mentoring/dashboard", "Mentoring dashboard", HeartPulse, ["admin", "programme_manager", "coordinator", "mentor", "federation_staff"]],
+  ]],
   ["AI assistant", [
     ["/admin", "Assistant dashboard", Activity, AI],
     ["/admin/review", "Answer review", TriangleAlert, AI],
@@ -200,7 +211,7 @@ export default function AdminApp() {
             <div key={title} className="nav-group">
               <div className="nav-title">{title}</div>
               {items.map(([to, label, Icon]) => (
-                <NavLink key={to} to={to} end={["/admin", "/admin/finance", "/admin/setup", "/admin/market", "/admin/books"].includes(to)}>
+                <NavLink key={to} to={to} end={["/admin", "/admin/finance", "/admin/setup", "/admin/market", "/admin/books", "/admin/mentoring"].includes(to)}>
                   <Icon aria-hidden="true" strokeWidth={1.9} />
                   {label}
                 </NavLink>
@@ -266,6 +277,11 @@ export default function AdminApp() {
           <Route path="/admin/market/units/:id" element={route("/admin/market", <UnitShop />)} />
           <Route path="/admin/books" element={route("/admin/books", <BusinessTracking />)} />
           <Route path="/admin/books/units/:id" element={route("/admin/books", <UnitBooks />)} />
+          <Route path="/admin/mentoring" element={route("/admin/mentoring", <Caseload />)} />
+          <Route path="/admin/mentoring/units/:id" element={route("/admin/mentoring", <UnitMentoring />)} />
+          <Route path="/admin/mentoring/tickets" element={route("/admin/mentoring/tickets", <Tickets />)} />
+          <Route path="/admin/mentoring/peers" element={route("/admin/mentoring/peers", <PeerSessions />)} />
+          <Route path="/admin/mentoring/dashboard" element={route("/admin/mentoring/dashboard", <MentoringDashboard />)} />
           <Route path="/admin/welcome" element={<NotYet />} />
           <Route path="*" element={<Navigate to={home} replace />} />
         </Routes>

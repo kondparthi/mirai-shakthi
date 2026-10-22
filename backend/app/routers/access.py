@@ -39,6 +39,15 @@ class StaffIn(BaseModel):
     sectors: list[str] = []
     active: bool = True
     password: Optional[str] = Field(default=None, min_length=8, max_length=72)
+    phone: Optional[str] = Field(default=None, max_length=15)  # contact number shown to entrepreneurs (mentors); not a login
+
+    @field_validator("phone")
+    @classmethod
+    def v_phone(cls, v):
+        v = re.sub(r"\D", "", v or "")[-10:]
+        if v and not re.fullmatch(r"[6-9]\d{9}", v):
+            raise ValueError("Enter a 10-digit mobile number")
+        return v or None
 
     @field_validator("email")
     @classmethod
@@ -59,7 +68,7 @@ class StaffIn(BaseModel):
 def _staff_out(u: User) -> dict:
     sc = u.scope or {}
     return {"id": u.id, "name": u.name, "email": u.email, "role": u.role, "role_label": ROLE_LABELS.get(u.role, u.role),
-            "districts": sc.get("districts", []), "sectors": sc.get("sectors", []), "active": u.is_active,
+            "districts": sc.get("districts", []), "sectors": sc.get("sectors", []), "phone": sc.get("phone"), "active": u.is_active,
             "created_at": u.created_at.isoformat() if u.created_at else None}
 
 
@@ -90,7 +99,7 @@ def create_staff(body: StaffIn, user: User = Depends(admin_only), db: Session = 
         raise HTTPException(409, "This email already has a login")
     _check_scope(db, body)
     u = User(name=body.name, email=body.email, role=body.role, password_hash=hash_secret(body.password), is_active=body.active,
-             scope={"districts": body.districts, "sectors": body.sectors})
+             scope={"districts": body.districts, "sectors": body.sectors, "phone": body.phone})
     db.add(u)
     db.flush()
     _audit(db, user, "staff_create", "user", u.id, {"role": body.role, "districts": body.districts, "sectors": body.sectors})
@@ -111,7 +120,7 @@ def update_staff(uid: int, body: StaffIn, user: User = Depends(admin_only), db: 
     _check_scope(db, body)
     before = _staff_out(u)
     u.name, u.email, u.role, u.is_active = body.name, body.email, body.role, body.active
-    u.scope = {"districts": body.districts, "sectors": body.sectors}
+    u.scope = {"districts": body.districts, "sectors": body.sectors, "phone": body.phone}
     if body.password:
         u.password_hash = hash_secret(body.password)
     _audit(db, user, "staff_update", "user", u.id, {"before": {k: before[k] for k in ("role", "districts", "sectors", "active")},

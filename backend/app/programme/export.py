@@ -62,6 +62,12 @@ def person_export(db: Session, user: User) -> dict:
                                   "monthly_summaries": [{"month": m.month, "sales": m.sales, "expenses": m.expenses, "profit": m.profit, "note": m.note}
                                                         for m in db.scalars(select(MonthlySummary).where(MonthlySummary.unit_id == u.id).order_by(MonthlySummary.month))]}
                                  for u in own]
+        from ..models_p7 import GrowthPlan, SupportTicket
+        out["support_tickets"] = [{"code": t.code, "unit": u.code, "category": t.category, "description": t.description, "status": t.status,
+                                   "resolution": t.resolution, "at": _iso(t.created_at)}
+                                  for u in own for t in db.scalars(select(SupportTicket).where(SupportTicket.unit_id == u.id))]
+        out["growth_plans"] = [{"unit": u.code, "goal": g.goal, "target": g.target, "target_date": _iso(g.target_date), "status": g.status}
+                               for u in own for g in db.scalars(select(GrowthPlan).where(GrowthPlan.unit_id == u.id))]
         out["groups"] = [{"group": gm.group.name, "role": gm.role, "contribution": gm.contribution}
                          for gm in db.scalars(select(GroupMember).where(GroupMember.entrepreneur_id == e.id))]
     sessions = list(db.scalars(select(GuidanceSession).where(GuidanceSession.user_id == user.id).order_by(GuidanceSession.id)))

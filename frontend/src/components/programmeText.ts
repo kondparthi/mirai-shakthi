@@ -114,6 +114,8 @@ const T = {
   shopIntro: ["Record sales, take orders and bookings, share posters, follow up customers.", "అమ్మకాలు నమోదు, ఆర్డర్లు & బుకింగ్‌లు, పోస్టర్లు పంపడం, కస్టమర్లను మళ్లీ సంప్రదించడం."],
   myBooks: ["My accounts", "నా లెక్కలు"],
   booksIntro: ["Daily sales and expenses (speak or type), money to collect, stock, loan EMIs and monthly summary.", "రోజువారీ అమ్మకాలు, ఖర్చులు (మాట్లాడి లేదా టైప్ చేసి), రావలసిన డబ్బు, సరుకు, రుణ వాయిదాలు, నెలవారీ సారాంశం."],
+  myMentor: ["My mentor & support", "నా మెంటార్ & సహాయం"],
+  mentorIntro: ["Your mentor, what you agreed together, and help when something goes wrong.", "మీ మెంటార్, కలిసి అనుకున్న పనులు, సమస్య వచ్చినప్పుడు సహాయం."],
   unitIntro: ["Equipment orders, registrations and the readiness checklist before launch.", "పరికరాల కొనుగోలు, నమోదులు, ప్రారంభానికి ముందు సిద్ధత జాబితా."],
   planIntro: ["Your project report (DPR), loan application status and EMIs.", "మీ ప్రాజెక్టు నివేదిక (డీపీఆర్), రుణ దరఖాస్తు స్థితి, వాయిదాలు."],
   trainingIntro: ["Entrepreneurship (EDP) and skill training, with a certificate you can show to banks.", "వ్యవస్థాపక (ఈడీపీ), నైపుణ్య శిక్షణ – బ్యాంకులకు చూపించగల సర్టిఫికేట్‌తో."],

@@ -48,3 +48,8 @@ SETUP_READ = PROGRAMME_READ                                                  # s
 SETUP_WRITE = ("admin", "programme_manager", "procurement", "coordinator", "dpr_officer")  # registrations, readiness, assets
 PROCURE = ("admin", "programme_manager", "procurement")                      # quotations, purchase orders, suppliers
 LAUNCH = ("admin", "programme_manager", "coordinator", "procurement")         # mark a unit launched
+
+# Phase 1 Sprint 7 – mentoring and handholding (M10)
+MENTOR_WRITE = ("admin", "programme_manager", "coordinator", "mentor")        # reviews, field visits, growth plans, peer sessions
+MENTOR_ASSIGN = ("admin", "programme_manager", "coordinator")                 # assign / change a unit's mentor, close handholding
+TICKET_SUPERVISE = ("admin", "programme_manager", "coordinator")              # see and re-assign every ticket in scope

@@ -153,6 +153,12 @@ export default function Programme() {
         </Link>
       )}
       {e!.stage >= 4 && (
+        <Link to="/my-mentor" className="card programme-card">
+          <div><b>{t("myMentor")}</b><div className="small">{t("mentorIntro")}</div></div>
+          <span aria-hidden="true">→</span>
+        </Link>
+      )}
+      {e!.stage >= 4 && (
         <Link to="/my-books" className="card programme-card">
           <div><b>{t("myBooks")}</b><div className="small">{t("booksIntro")}</div></div>
           <span aria-hidden="true">→</span>

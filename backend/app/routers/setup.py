@@ -704,6 +704,9 @@ def launch(uid: int, body: LaunchIn, user: User = Depends(launcher), db: Session
     if pending:
         raise HTTPException(422, "Still to do: " + "; ".join(pending))
     u.status, u.launch_date, u.launched_by_id, u.updated_at = "launched", body.launch_date, user.id, now()
+    from ..mentoring.service import ensure_mentorship
+
+    ensure_mentorship(db, u, user)  # the 24-month handholding starts at launch (M10)
     o = u.entrepreneur or u.group
     if o is not None:
         bump_stage(o, 5)

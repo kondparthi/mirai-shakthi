@@ -4,7 +4,7 @@ import { api } from "../../api";
 import { useMaster } from "../../components/masters";
 import { Field, Modal } from "../ui";
 
-type Staff = { id: number; name: string; email: string; role: string; role_label: string; districts: string[]; sectors: string[]; active: boolean; created_at: string | null };
+type Staff = { id: number; name: string; email: string; role: string; role_label: string; districts: string[]; sectors: string[]; phone?: string | null; active: boolean; created_at: string | null };
 type Role = { role: string; label: string };
 
 const ROLE_NOTE: Record<string, string> = {
@@ -30,7 +30,7 @@ function Multi({ items, value, onChange }: { items: { code: string; name_en: str
 
 function StaffForm({ s, roles, onSaved }: { s?: Staff; roles: Role[]; onSaved: () => void }) {
   const [f, setF] = useState({ name: s?.name ?? "", email: s?.email ?? "", role: s?.role ?? "coordinator", districts: s?.districts ?? [],
-    sectors: s?.sectors ?? [], active: s?.active ?? true, password: "" });
+    sectors: s?.sectors ?? [], phone: s?.phone ?? "", active: s?.active ?? true, password: "" });
   const [error, setError] = useState<string | null>(null);
   const districts = useMaster("district");
   const sectors = useMaster("sector");
@@ -38,7 +38,7 @@ function StaffForm({ s, roles, onSaved }: { s?: Staff; roles: Role[]; onSaved: (
   const save = async () => {
     setError(null);
     try {
-      await api(s ? `/admin/staff/${s.id}` : "/admin/staff", { method: s ? "PUT" : "POST", body: { ...f, password: f.password || null } });
+      await api(s ? `/admin/staff/${s.id}` : "/admin/staff", { method: s ? "PUT" : "POST", body: { ...f, password: f.password || null, phone: f.phone || null } });
       onSaved();
     } catch (e) {
       setError((e as Error).message);
@@ -54,6 +54,8 @@ function StaffForm({ s, roles, onSaved }: { s?: Staff; roles: Role[]; onSaved: (
             {roles.map((r) => <option key={r.role} value={r.role}>{r.label}</option>)}</select></Field>
         <Field label={s ? "New password (leave blank to keep)" : "Password"} hint="At least 8 characters. Share it privately.">
           <input className="input" type="text" autoComplete="new-password" value={f.password} onChange={(e) => setF({ ...f, password: e.target.value })} /></Field>
+        <Field label="Phone (optional)" hint="Shown to entrepreneurs when this person is their mentor (call / WhatsApp). Not used to log in.">
+          <input className="input" inputMode="numeric" maxLength={10} value={f.phone} onChange={(e) => setF({ ...f, phone: e.target.value.replace(/\D/g, "") })} /></Field>
       </div>
       <Field label="Districts" hint={allScope ? "This role sees all districts." : "Records outside these districts are hidden. None = only records this person enrolled."}>
         <Multi items={districts} value={f.districts} onChange={(v) => setF({ ...f, districts: v })} /></Field>

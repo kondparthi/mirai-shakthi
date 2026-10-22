@@ -255,3 +255,4 @@ from . import models_p3  # noqa: E402,F401  (Phase 1 Sprint 3 tables)
 from . import models_p4  # noqa: E402,F401  (Phase 1 Sprint 4 tables)
 from . import models_p5  # noqa: E402,F401  (Phase 1 Sprint 5 tables)
 from . import models_p6  # noqa: E402,F401  (Phase 1 Sprint 6 tables)
+from . import models_p7  # noqa: E402,F401
