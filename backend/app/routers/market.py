@@ -25,6 +25,7 @@ from ..programme.service import Masters
 from ..roles import SETUP_READ
 from ..security import ALGO, current_user, require_roles
 from ..setup.service import can_see_unit
+from ..books.service import sync_order
 from ..training.service import audit
 from ..market import promo
 from ..market.service import (FILE_DIR, MARKET_WRITE, SALE_STATUSES, availability, clean_mobile, file_url, listing_out, masked, my_unit_ids, new_token,
@@ -248,6 +249,7 @@ def build_order(db: Session, u: Unit, body: OrderIn, user: User | None, source: 
     db.add(o)
     db.flush()
     o.code = f"OR-{date.today().year}-{o.id:05d}"
+    sync_order(db, o)  # delivered / paid orders are sales in the books (M9)
     return o
 
 
@@ -317,6 +319,7 @@ def order_status(oid: int, body: StatusIn, user: User = Depends(current_user), d
     o.status = body.status
     o.events = list(o.events or []) + [{"status": body.status, "at": now().isoformat(), "by": user.name or user.email or user.mobile}]
     o.updated_at = now()
+    sync_order(db, o)
     db.commit()
     return order_out(o, user.language or "en")
 

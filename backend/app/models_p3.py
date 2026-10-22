@@ -57,6 +57,9 @@ class EnterpriseModel(Base):
     # Sprint 4 (M7): registrations the unit needs and model-specific readiness items (Form 7.3). Nullable: added to an existing table.
     registrations: Mapped[Optional[list]] = mapped_column(JSON)       # codes from models_p4.REGISTRATIONS
     readiness_items: Mapped[Optional[list]] = mapped_column(JSON)     # extra checklist items, e.g. "Branding done"
+    # Sprint 6 (M9): bookkeeping categories {sale: [{code, label, label_te}], expense: [...]} and starter stock items.
+    ledger_categories: Mapped[Optional[dict]] = mapped_column(JSON)
+    stock_template: Mapped[Optional[list]] = mapped_column(JSON)      # [{name, name_te, measure, reorder_level}]
     expected_monthly_sales: Mapped[Optional[float]] = mapped_column(Float)
     jobs: Mapped[Optional[int]] = mapped_column(SmallInteger)
     payback_months: Mapped[Optional[int]] = mapped_column(SmallInteger)

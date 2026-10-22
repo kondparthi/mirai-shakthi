@@ -158,6 +158,19 @@ def load_setup(db) -> None:
             db.add(Supplier(**s, approved=True, note="Sample supplier – replace before go-live"))
 
 
+def load_books(db) -> None:
+    """Phase 1 Sprint 6: bookkeeping categories and starter stock items for the starter models (only where empty)."""
+    from app.models_p3 import EnterpriseModel
+    from seed.data_p6 import MODEL_BOOKS
+
+    for m in db.scalars(select(EnterpriseModel)):
+        extra = MODEL_BOOKS.get(m.code)
+        if extra and m.ledger_categories is None:
+            m.ledger_categories = extra["ledger_categories"]
+        if extra and m.stock_template is None:
+            m.stock_template = extra["stock_template"]
+
+
 def main(reset: bool = False) -> None:
     ensure_database()
     if reset:
@@ -206,6 +219,7 @@ def main(reset: bool = False) -> None:
         load_finance(db)
         db.flush()
         load_setup(db)
+        load_books(db)
         # Demo portal login for one sample expert (screen E1). Change or remove before go-live.
         demo = db.scalar(select(Expert).where(Expert.name == "Sample CA – Guntur"))
         demo_email = os.getenv("DEMO_EXPERT_EMAIL", "ca.guntur@mirai.local")

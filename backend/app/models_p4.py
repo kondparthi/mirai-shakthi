@@ -67,6 +67,7 @@ class Unit(Base):
     lat: Mapped[Optional[float]] = mapped_column(Float)
     lng: Mapped[Optional[float]] = mapped_column(Float)
     status: Mapped[str] = mapped_column(String(12), default="setting_up")  # setting_up | launched | paused | closed
+    upi_id: Mapped[Optional[str]] = mapped_column(String(60))              # for the UPI QR on receipts (Sprint 6)
     readiness: Mapped[dict] = mapped_column(JSON, default=dict)            # manual items: key -> {done, note, photo, by, at}
     launch_date: Mapped[Optional[date]] = mapped_column(Date)
     launched_by_id: Mapped[Optional[int]] = mapped_column(ForeignKey("users.id", ondelete="SET NULL"))

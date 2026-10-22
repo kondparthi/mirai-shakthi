@@ -179,6 +179,7 @@ export default function UnitDetail() {
         </div>
         <div className="row-gap">
           {u.status !== "setting_up" && <Link className="btn" to={`/admin/market/units/${u.id}`}>Shop & orders</Link>}
+          <Link className="btn secondary" to={`/admin/books/units/${u.id}`}>Accounts</Link>
           {meta.can.procure && u.status !== "closed" && <button className="btn secondary" onClick={() => setModal("purchase")}><Plus size={16} /> New purchase</button>}
           {meta.can.launch && u.status === "setting_up" && <button className="btn" disabled={!allDone} title={allDone ? "" : "Complete the readiness checklist first"} onClick={() => setModal("launch")}><Rocket size={16} /> Launch</button>}
         </div>

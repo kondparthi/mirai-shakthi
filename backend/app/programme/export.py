@@ -53,6 +53,15 @@ def person_export(db: Session, user: User) -> dict:
         out["enterprise_sales"] = [{"unit": u.code, "orders": len(u_orders), "sales": round(sum(o.amount for o in u_orders if o.status in ("delivered", "paid")), 2)}
                                    for u in db.scalars(select(Unit).where(Unit.entrepreneur_id == e.id))
                                    for u_orders in [list(db.scalars(select(Order).where(Order.unit_id == u.id)))]]
+        from ..models_p6 import LedgerEntry, MonthlySummary
+        own = list(db.scalars(select(Unit).where(Unit.entrepreneur_id == e.id)))
+        out["business_books"] = [{"unit": u.code,
+                                  "entries": [{"kind": x.kind, "date": _iso(x.on), "amount": x.amount, "category": x.category, "qty": x.qty,
+                                               "payment_mode": x.payment_mode, "due_date": _iso(x.due_date), "collected_on": _iso(x.collected_on), "note": x.note}
+                                              for x in db.scalars(select(LedgerEntry).where(LedgerEntry.unit_id == u.id).order_by(LedgerEntry.on))],
+                                  "monthly_summaries": [{"month": m.month, "sales": m.sales, "expenses": m.expenses, "profit": m.profit, "note": m.note}
+                                                        for m in db.scalars(select(MonthlySummary).where(MonthlySummary.unit_id == u.id).order_by(MonthlySummary.month))]}
+                                 for u in own]
         out["groups"] = [{"group": gm.group.name, "role": gm.role, "contribution": gm.contribution}
                          for gm in db.scalars(select(GroupMember).where(GroupMember.entrepreneur_id == e.id))]
     sessions = list(db.scalars(select(GuidanceSession).where(GuidanceSession.user_id == user.id).order_by(GuidanceSession.id)))

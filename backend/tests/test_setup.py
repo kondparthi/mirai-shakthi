@@ -143,6 +143,9 @@ def test_setup_flow(client):
     assert client.post(f"/api/v1/setup/units/{uid}/readiness/working_capital/photo", headers=coord,
                        files={"file": ("w.jpg", jpeg(), "image/jpeg")}).json()["checklist"][3]["photo_url"]
     r = client.post(f"/api/v1/setup/units/{uid}/launch", headers=coord, json={"launch_date": date.today().isoformat()})
+    assert r.status_code == 422 and "Bookkeeping" in r.json()["detail"]  # automatic since M9: a first entry in the books
+    client.post(f"/api/v1/books/units/{uid}/entries", headers=eh, json={"kind": "expense", "amount": 950, "category": "gas", "on": date.today().isoformat()})
+    r = client.post(f"/api/v1/setup/units/{uid}/launch", headers=coord, json={"launch_date": date.today().isoformat()})
     assert r.status_code == 200, r.text
     assert r.json()["status"] == "launched" and client.get(f"/api/v1/programme/entrepreneurs/{eid}", headers=h).json()["stage"] == 5
     assert client.put(f"/api/v1/setup/units/{uid}", headers=coord, json={"name": u["name"], "status": "setting_up"}).status_code == 422

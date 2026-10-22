@@ -5,12 +5,12 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from .config import settings
 from .guidance import llm
-from .routers import (access, admin, artefacts, auth, connect, dpr, dpr_me, enrol, expert, guidance, market, masters, profile, programme, setup,
+from .routers import (access, admin, artefacts, auth, books, connect, dpr, dpr_me, enrol, expert, guidance, market, masters, profile, programme, setup,
                       setup_portal, training, training_me)
 
 logging.basicConfig(level=logging.INFO)
 
-app = FastAPI(title=settings.APP_NAME, version="1.5.0")
+app = FastAPI(title=settings.APP_NAME, version="1.6.0")
 app.add_middleware(CORSMiddleware, allow_origins=settings.CORS_ORIGINS, allow_credentials=True,
                    allow_methods=["*"], allow_headers=["*"])
 
@@ -38,6 +38,8 @@ app.include_router(setup_portal.supplier_router)
 app.include_router(setup.router)
 app.include_router(market.router)
 app.include_router(market.public)
+app.include_router(books.router)
+app.include_router(books.public)
 
 
 @app.get("/api/v1/health")

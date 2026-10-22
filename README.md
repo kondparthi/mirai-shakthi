@@ -303,6 +303,35 @@ Customers use the **public shop** `#/shop/<unit code>` and the **order tracking*
 2. Back up `backend/storage/market` (product photos, posters, campaign materials).
 3. `PUBLIC_URL` in `.env` must be the site address (e.g. `https://miraimsme.com`) – it is used in shop links, tracking links and poster QR codes.
 
+## Phase 1, Sprint 6 – Daily business management (M9)
+
+Entrepreneur app → **My accounts** (from stage 4, so bookkeeping can start before launch). Staff portal → **Sales & marketing → Business tracking**, and Units → *Accounts*.
+
+| Who | Can |
+|---|---|
+| Entrepreneur (their own or their group's unit) | Record sales and expenses, stock, money to collect, receipts, EMIs paid, send monthly summaries with a note |
+| Coordinator, Programme Manager, Admin, SHG Federation staff, Mentor | The same for units in their districts (to help), review monthly summaries |
+| Other programme staff | See accounts and business tracking in their districts |
+
+- **Sales and expenses (Form 9.1)**: two big buttons; amount, category from the enterprise model (millet café, tea stall, drone services – Telugu labels are a first draft), date, cash / UPI / credit, customer for credit sales (due in 7 days by default), stock item and quantity, note, bill photo. Entries can be added up to 90 days back; the entrepreneur can remove an entry within 2 days (staff later).
+- **Speak or type**: "sold 40 plates for 1600 rupees cash" / "పాలు 10 లీటర్లు 520 రూపాయలు కొన్నాను" fills the form, which the person checks before saving. Rules do this without AI; with an AI key the AI helps when the rules miss the amount or type.
+- **Revenue and profit kept apart**: loan EMIs, money taken home and new equipment are recorded but not counted as business costs.
+- **Orders flow in (M8 → M9)**: a delivered order becomes a credit sale, a paid order a cash / UPI sale, a cancelled order is removed – no double entry.
+- **Money to collect**: credit sales with due dates, overdue marked, WhatsApp reminder with the receipt link, *Got it – cash / UPI*.
+- **Receipts**: A5 PDF (Telugu-safe) with a UPI QR code for unpaid amounts when the unit has a UPI ID; shared on WhatsApp by a signed link valid 60 days.
+- **Stock**: starter items from the model; buying with a stock item adds stock, selling takes it out; *Used / Received / Counted*; low-stock alert once an item has been stocked.
+- **Summaries**: today / this week / this month with the change against the same days before, daily bars, where the money came from and went.
+- **EMI tracker**: the loan schedule from M6, next EMI, overdue EMIs; *I paid this EMI* marks the repayment and writes it in the books.
+- **Monthly summary**: finished months are frozen and sent automatically (from the launch month); the entrepreneur can add a note and send again, and can send the current month from the 25th. The first summary with entries moves the entrepreneur to lifecycle stage 6.
+- **Business alerts** (to the mentor and Business tracking): no entries, records on fewer than 8 days, sales down 20 % on the previous months, costs up 10 points, a loss, EMIs late or overdue, a lot of credit still to collect. Staff and mentors add a review note.
+- **Readiness**: *Bookkeeping set up in the app* is now automatic – done after the first entry (an earlier tick still counts).
+- The person's data export now includes their books.
+
+### Updating to Phase 1 Sprint 6
+
+1. Copy the changed files over the project, `git push`, then `mirai-update` on the server (new tables and columns; no new packages).
+2. Units still setting up need one entry in *My accounts* before launch (bookkeeping is now an automatic readiness item).
+
 ## Run it on your computer
 
 Requirements: Python 3.12+ (3.14 works), Node 20+, MySQL 8. On Windows use `py -m pip …` and `py -m …` so packages and commands use the same Python.

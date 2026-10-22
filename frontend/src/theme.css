@@ -445,3 +445,46 @@ input[type="file"]::file-selector-button { font: inherit; font-weight: 600; bord
 
 .listing b { display: block; }
 .listing .small { display: block; }
+
+/* ---------- Phase 1 Sprint 6: daily accounts (M9) ---------- */
+.books-quick { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; max-width: 620px; }
+.books-quick .big { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 64px; border-radius: 18px; border: 0; font-size: 19px; font-weight: 700;
+  font-family: var(--display); color: #fff; box-shadow: var(--shadow); cursor: pointer; transition: opacity 0.15s, transform 0.1s; }
+.books-quick .big:active { transform: scale(0.98); }
+.books-quick .big.sale { background: linear-gradient(135deg, var(--emerald), var(--forest)); }
+.books-quick .big.expense { background: linear-gradient(135deg, #d2802c, #a5521b); }
+.books-quick .big.off { opacity: 0.38; box-shadow: none; }
+.books .chg { display: inline-flex; align-items: center; gap: 3px; font-size: 11.5px; font-weight: 600; }
+.books .chg.ok { color: var(--ok); } .books .chg.bad { color: #b4471b; }
+.books-bars { display: flex; align-items: flex-end; gap: 3px; height: 110px; }
+.books-bars > div { flex: 1; display: flex; align-items: flex-end; gap: 1px; height: 100%; }
+.books-bars span { flex: 1; min-height: 2px; border-radius: 3px 3px 0 0; }
+.books-bars .s, .bb-legend i.s { background: var(--emerald); } .books-bars .e, .bb-legend i.e { background: #d9873a; }
+.bb-legend { display: inline-flex; align-items: center; gap: 6px; } .bb-legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-left: 6px; }
+.cat-row { display: grid; grid-template-columns: minmax(110px, 1.3fr) 2fr minmax(70px, auto); gap: 10px; align-items: center; font-size: 14px; }
+.cat-row .bar { height: 10px; border-radius: 999px; overflow: hidden; } .cat-row .bar span { display: block; height: 100%; border-radius: 999px; }
+.cat-row .bar span.expense { background: #d9873a; } .cat-row b { text-align: right; font-variant-numeric: tabular-nums; }
+.books-alert { display: flex; gap: 10px; align-items: flex-start; background: #fff7e6; border-color: #f3dcae; color: #7a4a05; }
+.books-alert.soft { background: #f3f8ff; border-color: #d6e4f7; color: #24466f; }
+button.link-card { text-align: left; width: 100%; font: inherit; cursor: pointer; }
+.voice-box { background: #f6fbf8; }
+.big-num { font-size: 26px !important; font-weight: 700; font-family: var(--display); height: 56px; }
+.entry-row, .stock-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; background: #fff; border: 1px solid #e3ece7;
+  border-left: 4px solid var(--emerald); border-radius: 14px; padding: 10px 12px; }
+.entry-row.expense { border-left-color: #d9873a; }
+.entry-row .amt { font-family: var(--display); font-size: 17px; white-space: nowrap; } .entry-row.sale .amt { color: var(--forest); } .entry-row.expense .amt { color: #a5521b; }
+.books .ellipsis { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 52vw; }
+.stock-row { flex-wrap: wrap; border-left-color: #c9d8d0; } .stock-row.low { border-left-color: #d9873a; background: #fffaf1; } .stock-row.off { opacity: 0.55; }
+.stock-row > .entry-main { flex: 1; } .stock-row .qty { text-align: right; min-width: 64px; } .stock-row .qty b { font-family: var(--display); font-size: 20px; display: block; }
+.stock-row .qty small { color: var(--ink-2); font-size: 12px; } .stock-row.low .qty b { color: #a76705; }
+.order-card.late { border-color: #f0c9a8; background: #fffaf4; }
+tr.late td { background: #fff7ef; }
+.alert-line { display: flex; gap: 6px; align-items: center; font-size: 13px; color: #8a5a07; } .alert-line.high { color: #b4471b; font-weight: 600; }
+.review-note { background: #eef6ff; border-radius: 10px; padding: 6px 10px; color: #24466f; display: flex; gap: 6px; align-items: center; }
+.tag.red { background: #fde9e4; color: #b4471b; }
+@media (max-width: 480px) { .stock-row > .stock-actions { width: 100%; justify-content: flex-end; } }
+.entry-main { display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1; }
+.entry-main > b { display: block; } .entry-main > span { display: block; }
+.entry-side { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; flex: none; }
+.entry-actions, .stock-actions { display: flex; gap: 2px; align-items: center; }
+.stock-actions { gap: 6px; flex-wrap: wrap; } .stock-actions .input { width: 76px; flex: none; }

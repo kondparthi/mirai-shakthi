@@ -8,7 +8,7 @@ from pathlib import Path
 
 from fastapi import HTTPException
 from jose import jwt
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from ..config import settings
@@ -28,7 +28,7 @@ STANDARD_ITEMS = [
     ("registrations", "Registrations done", "auto"),
     ("training", "Training completed (certificate)", "auto"),
     ("working_capital", "Working capital available", "manual"),
-    ("bookkeeping", "Bookkeeping set up in the app", "manual"),
+    ("bookkeeping", "Bookkeeping set up in the app", "auto"),
 ]
 STANDARD_TE = {
     "equipment": "పరికరాలు అమర్చి పరీక్షించారు", "registrations": "నమోదులు పూర్తయ్యాయి", "training": "శిక్షణ పూర్తయింది (సర్టిఫికేట్)",
@@ -111,6 +111,18 @@ def ensure_unit(db: Session, d: Dpr, user: User | None) -> Unit:
 
 
 # ---------------------------------------------------------------- readiness (Form 7.3)
+def _books_ready(db: Session, u: Unit) -> tuple[bool, str]:
+    """Automatic from M9: done once the unit has recorded a sale or expense in the app (a tick from before M9 still counts)."""
+    from ..models_p6 import LedgerEntry
+
+    n = db.scalar(select(func.count()).select_from(LedgerEntry).where(LedgerEntry.unit_id == u.id)) or 0
+    if n:
+        return True, f"{n} entr{'y' if n == 1 else 'ies'} in My accounts"
+    if ((u.readiness or {}).get("bookkeeping") or {}).get("done"):
+        return True, "Ticked before bookkeeping moved into the app"
+    return False, "Record a first sale or expense in My accounts"
+
+
 def checklist(db: Session, u: Unit, lang: str = "en") -> list[dict]:
     live = [p for p in u.purchases if p.status != "cancelled"]
     regs = [r for r in u.registrations]
@@ -131,6 +143,7 @@ def checklist(db: Session, u: Unit, lang: str = "en") -> list[dict]:
         "registrations": (bool(regs) and all(r.status in ("done", "not_needed") for r in regs),
                           f"{sum(r.status in ('done', 'not_needed') for r in regs)} of {len(regs)} done"),
         "training": (bool(cert or ext), f"Certificate {cert.certificate_no}" if cert else (ext.title if ext else "No certificate yet")),
+        "bookkeeping": _books_ready(db, u),
     }
     out = []
     for key, label, kind in STANDARD_ITEMS:
