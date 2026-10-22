@@ -1,7 +1,7 @@
 import { lazy, Suspense, useEffect } from "react";
 import { Navigate, NavLink, Route, Routes, useLocation, useParams } from "react-router-dom";
 import { useAuth } from "./auth";
-import { GraduationCap, Landmark, ShieldCheck, Sprout, UserRound } from "lucide-react";
+import { Factory, GraduationCap, Landmark, ShieldCheck, Sprout, UserRound } from "lucide-react";
 import Logo from "./components/Logo";
 import UserMenu from "./components/UserMenu";
 import { useLang } from "./i18n";
@@ -24,6 +24,8 @@ const Training = lazy(() => import("./pages/Training"));
 const Checkin = lazy(() => import("./pages/Training").then((m) => ({ default: m.Checkin })));
 const Verify = lazy(() => import("./pages/Verify"));
 const BusinessPlan = lazy(() => import("./pages/BusinessPlan"));
+const MyUnit = lazy(() => import("./pages/MyUnit"));
+const SupplierApp = lazy(() => import("./supplier/SupplierApp"));
 
 function CheckinRoute() {
   const { token = "" } = useParams();
@@ -68,6 +70,7 @@ function Shell({ children }: { children: React.ReactNode }) {
             <NavLink role="menuitem" to="/programme"><Sprout aria-hidden="true" />{t("programmeCardTitle")}</NavLink>
             <NavLink role="menuitem" to="/training"><GraduationCap aria-hidden="true" />{lang === "te" ? "నా శిక్షణ" : "My training"}</NavLink>
             <NavLink role="menuitem" to="/business-plan"><Landmark aria-hidden="true" />{lang === "te" ? "వ్యాపార ప్రణాళిక & రుణం" : "Business plan & loan"}</NavLink>
+            <NavLink role="menuitem" to="/my-unit"><Factory aria-hidden="true" />{lang === "te" ? "నా వ్యాపారం ఏర్పాటు" : "My enterprise set-up"}</NavLink>
             <NavLink role="menuitem" to="/my-data"><ShieldCheck aria-hidden="true" />{t("myDataLink")}</NavLink>
           </>} />
       </header>
@@ -118,13 +121,16 @@ export default function App() {
   if (location.pathname.startsWith("/admin")) return <Suspense fallback={<Loading />}><AdminApp /></Suspense>;
   // Expert workspace lives at #/expert and uses the same staff login.
   if (location.pathname.startsWith("/expert")) return <Suspense fallback={<Loading />}><ExpertApp /></Suspense>;
+  // Supplier portal lives at #/supplier (limited: quotations, orders, deliveries).
+  if (location.pathname.startsWith("/supplier")) return <Suspense fallback={<Loading />}><SupplierApp /></Suspense>;
   // Visitors see the landing page; Register / Log in open the mobile + OTP screen at #/login.
   // A training check-in QR opened while logged out: log in first, then the check-in completes on the same address.
   if (!user) return location.pathname.startsWith("/login") || location.pathname.startsWith("/checkin") ? <Login /> : <Suspense fallback={<Loading />}><Landing /></Suspense>;
   if (user.role === "expert") return <Navigate to="/expert" replace />;
+  if (user.role === "supplier") return <Navigate to="/supplier" replace />;
   if (user.role !== "msme") return <Navigate to="/admin" replace />;
   // The business profile is needed for guidance; the programme enrolment has its own form, so it is reachable without it.
-  const noProfileOk = ["/profile", "/programme", "/my-data", "/training", "/checkin", "/business-plan"].some((p) => location.pathname.startsWith(p));
+  const noProfileOk = ["/profile", "/programme", "/my-data", "/training", "/checkin", "/business-plan", "/my-unit"].some((p) => location.pathname.startsWith(p));
   if (!user.has_profile && !noProfileOk) return <Navigate to="/profile" replace />;
 
   return (
@@ -145,6 +151,7 @@ export default function App() {
         <Route path="/my-data" element={<MyData />} />
         <Route path="/training" element={<Training />} />
         <Route path="/business-plan" element={<BusinessPlan />} />
+        <Route path="/my-unit" element={<MyUnit />} />
         <Route path="/checkin/:token" element={<CheckinRoute />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

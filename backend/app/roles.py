@@ -42,3 +42,9 @@ DPR_WRITE = ("admin", "programme_manager", "dpr_officer")        # prepare DPRs,
 DPR_APPROVE = ("admin", "programme_manager", "dpr_officer")      # review and approve DPRs
 MODELS_WRITE = ("admin", "programme_manager", "sector_expert")   # enterprise models (DPR templates)
 SCHEMES_WRITE = ("admin", "programme_manager", "dpr_officer")    # scheme library
+
+# Phase 1 Sprint 4 – enterprise set-up and procurement (M7)
+SETUP_READ = PROGRAMME_READ                                                  # see units in scope
+SETUP_WRITE = ("admin", "programme_manager", "procurement", "coordinator", "dpr_officer")  # registrations, readiness, assets
+PROCURE = ("admin", "programme_manager", "procurement")                      # quotations, purchase orders, suppliers
+LAUNCH = ("admin", "programme_manager", "coordinator", "procurement")         # mark a unit launched

@@ -252,3 +252,4 @@ class AuditLog(Base):
 from . import models_p1  # noqa: E402,F401
 from . import models_p2  # noqa: E402,F401
 from . import models_p3  # noqa: E402,F401  (Phase 1 Sprint 3 tables)
+from . import models_p4  # noqa: E402,F401  (Phase 1 Sprint 4 tables)

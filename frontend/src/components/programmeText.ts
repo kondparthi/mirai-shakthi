@@ -109,6 +109,8 @@ const T = {
   // Training (Sprint 2)
   myTraining: ["My training", "నా శిక్షణ"],
   myPlan: ["My business plan & loan", "నా వ్యాపార ప్రణాళిక & రుణం"],
+  myUnit: ["My enterprise set-up", "నా వ్యాపారం ఏర్పాటు"],
+  unitIntro: ["Equipment orders, registrations and the readiness checklist before launch.", "పరికరాల కొనుగోలు, నమోదులు, ప్రారంభానికి ముందు సిద్ధత జాబితా."],
   planIntro: ["Your project report (DPR), loan application status and EMIs.", "మీ ప్రాజెక్టు నివేదిక (డీపీఆర్), రుణ దరఖాస్తు స్థితి, వాయిదాలు."],
   trainingIntro: ["Entrepreneurship (EDP) and skill training, with a certificate you can show to banks.", "వ్యవస్థాపక (ఈడీపీ), నైపుణ్య శిక్షణ – బ్యాంకులకు చూపించగల సర్టిఫికేట్‌తో."],
   recommendedForYou: ["Recommended for you", "మీకు సిఫార్సు"],

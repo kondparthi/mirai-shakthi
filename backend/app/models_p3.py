@@ -54,6 +54,9 @@ class EnterpriseModel(Base):
     schemes: Mapped[list] = mapped_column(JSON, default=list)         # scheme codes this model can use
     sales_template: Mapped[dict] = mapped_column(JSON, default=dict)    # {items:[{name, unit, units_per_day, price}], working_days, ...}
     expense_template: Mapped[dict] = mapped_column(JSON, default=dict)  # {raw_material_pct, salaries, rent, fuel, maintenance, other}
+    # Sprint 4 (M7): registrations the unit needs and model-specific readiness items (Form 7.3). Nullable: added to an existing table.
+    registrations: Mapped[Optional[list]] = mapped_column(JSON)       # codes from models_p4.REGISTRATIONS
+    readiness_items: Mapped[Optional[list]] = mapped_column(JSON)     # extra checklist items, e.g. "Branding done"
     expected_monthly_sales: Mapped[Optional[float]] = mapped_column(Float)
     jobs: Mapped[Optional[int]] = mapped_column(SmallInteger)
     payback_months: Mapped[Optional[int]] = mapped_column(SmallInteger)

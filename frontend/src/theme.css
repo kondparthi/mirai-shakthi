@@ -383,3 +383,18 @@ input[type="file"]::file-selector-button { font: inherit; font-weight: 600; bord
 .plan-figs small { display: block; opacity: 0.8; font-size: 12px; }
 .plan-figs b { font-size: 17px; color: #fff; }
 .emi-next { display: flex; justify-content: space-between; align-items: center; gap: 10px; background: var(--amber-bg); border-radius: 14px; padding: 12px 14px; }
+
+/* ---------- Phase 1 Sprint 4: enterprise set-up ---------- */
+.reg-row { border-bottom: 1px solid #edf3f0; padding: 8px 0; }
+.reg-row:last-of-type { border-bottom: 0; }
+.readiness { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.readiness li { display: flex; align-items: center; gap: 12px; border: 1px solid #e3ece7; border-radius: 14px; padding: 10px 12px; flex-wrap: wrap; }
+.readiness li.done { background: #f3fbf7; border-color: #c4e8d2; }
+.readiness .ok-icon { color: var(--ok); flex: none; } .readiness .todo-icon { color: #b9c4be; flex: none; }
+.thumb { width: 52px; height: 40px; object-fit: cover; border-radius: 8px; border: 1px solid var(--line); }
+.compare th.chosen, .compare td.chosen { background: #eef8f3 !important; }
+.compare td.best { color: var(--ok); font-weight: 700; }
+.link-btn { background: none; border: 0; padding: 0; color: var(--emerald); cursor: pointer; font: inherit; text-decoration: underline; }
+.photo-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.photo-row img { width: 140px; height: 104px; object-fit: cover; border-radius: 12px; border: 1px solid var(--line); }
+@media (min-width: 1024px) { .shell.no-side { padding-left: 0; } .shell.no-side .page { margin: 0 auto; } }

@@ -546,6 +546,8 @@ def dpr_status(did: int, body: StatusIn, user: User = Depends(approver), db: Ses
         o = d.entrepreneur or d.group
         if o is not None and result["summary"]["loan"] <= 0:
             bump_stage(o, 4)  # own funds confirmed: stage 3 is complete
+            from ..setup.service import ensure_unit
+            ensure_unit(db, d, user)  # set-up (M7) starts
     else:
         if d.status == "draft":
             raise HTTPException(409, "This DPR is already a draft")
@@ -869,6 +871,8 @@ def application_status(aid: int, body: AppStatusIn, user: User = Depends(writer)
         o = a.entrepreneur or a.group
         if o is not None:
             bump_stage(o, 4)  # funds sanctioned: stage 3 (DPR & finance) is complete
+        from ..setup.service import ensure_unit
+        ensure_unit(db, a.dpr, user)  # set-up (M7) starts
     elif body.status == "disbursed":
         missing = [n for n, v in (("disbursed amount", body.disbursed_amount), ("tenure", body.tenure_months),
                                   ("first EMI date", body.first_emi_date)) if not v]

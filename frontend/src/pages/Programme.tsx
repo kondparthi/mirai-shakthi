@@ -152,6 +152,12 @@ export default function Programme() {
           <span aria-hidden="true">→</span>
         </Link>
       )}
+      {e!.stage >= 4 && (
+        <Link to="/my-unit" className="card programme-card">
+          <div><b>{t("myUnit")}</b><div className="small">{t("unitIntro")}</div></div>
+          <span aria-hidden="true">→</span>
+        </Link>
+      )}
 
       <div className="card stack">
         <h2 style={{ margin: 0 }}>{t("readiness")}</h2>

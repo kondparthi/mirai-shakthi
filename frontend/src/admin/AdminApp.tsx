@@ -1,6 +1,6 @@
 import { lazy, Suspense, useState } from "react";
 import {
-  Activity, BadgeCheck, BadgeIndianRupee, BookOpen, Boxes, FileSpreadsheet, HandCoins, Building2, ChartColumn, Database, ExternalLink, GraduationCap, KeyRound, Landmark, LayoutDashboard, Library,
+  Activity, BadgeCheck, BadgeIndianRupee, BookOpen, Boxes, Factory, FileSpreadsheet, HandCoins, Store, Wrench, Building2, ChartColumn, Database, ExternalLink, GraduationCap, KeyRound, Landmark, LayoutDashboard, Library,
   ListChecks, Menu, MessagesSquare, PhoneCall, ScrollText, ShieldCheck, SlidersHorizontal, TriangleAlert, Upload, UserRound, Users as UsersIcon, UsersRound,
   type LucideIcon,
 } from "lucide-react";
@@ -43,6 +43,11 @@ const ApplicationDetail = lazy(() => import("./dpr/Applications").then((m) => ({
 const Schemes = lazy(() => import("./dpr/Schemes"));
 const Models = lazy(() => import("./dpr/Models"));
 const FinanceReports = lazy(() => import("./dpr/FinanceReports"));
+const SetupReports = lazy(() => import("./setup/SetupReports"));
+const Units = lazy(() => import("./setup/Units"));
+const UnitDetail = lazy(() => import("./setup/UnitDetail"));
+const PurchaseDetail = lazy(() => import("./setup/PurchaseDetail"));
+const Suppliers = lazy(() => import("./setup/Suppliers"));
 
 function AdminLogin() {
   const { signIn } = useAuth();
@@ -116,6 +121,11 @@ const NAV: [string, NavItem[]][] = [
     ["/admin/finance/schemes", "Schemes", Landmark, ALL_READ],
     ["/admin/finance/models", "Enterprise models", Boxes, ALL_READ],
   ]],
+  ["Enterprise set-up", [
+    ["/admin/setup", "Set-up dashboard", Factory, ALL_READ],
+    ["/admin/setup/units", "Units", Wrench, ALL_READ],
+    ["/admin/setup/suppliers", "Suppliers", Store, ALL_READ],
+  ]],
   ["AI assistant", [
     ["/admin", "Assistant dashboard", Activity, AI],
     ["/admin/review", "Answer review", TriangleAlert, AI],
@@ -156,6 +166,7 @@ export default function AdminApp() {
   const [navOpen, setNavOpen] = useState(false);
   if (!user || user.role === "msme") return <AdminLogin />;
   if (user.role === "expert") return <Navigate to="/expert" replace />;
+  if (user.role === "supplier") return <Navigate to="/supplier" replace />;
   const can = (roles: string[]) => roles.includes(user.role);
   const sections = NAV.map(([title, items]) => [title, items.filter((i) => can(i[3]))] as const).filter(([, items]) => items.length);
   const home = sections[0]?.[1][0]?.[0] ?? "/admin/welcome";
@@ -177,7 +188,7 @@ export default function AdminApp() {
             <div key={title} className="nav-group">
               <div className="nav-title">{title}</div>
               {items.map(([to, label, Icon]) => (
-                <NavLink key={to} to={to} end={to === "/admin" || to === "/admin/finance"}>
+                <NavLink key={to} to={to} end={to === "/admin" || to === "/admin/finance" || to === "/admin/setup"}>
                   <Icon aria-hidden="true" strokeWidth={1.9} />
                   {label}
                 </NavLink>
@@ -232,6 +243,11 @@ export default function AdminApp() {
           <Route path="/admin/finance/applications/:id" element={route("/admin/finance/applications", <ApplicationDetail />)} />
           <Route path="/admin/finance/schemes" element={route("/admin/finance/schemes", <Schemes />)} />
           <Route path="/admin/finance/models" element={route("/admin/finance/models", <Models />)} />
+          <Route path="/admin/setup" element={route("/admin/setup", <SetupReports />)} />
+          <Route path="/admin/setup/units" element={route("/admin/setup/units", <Units />)} />
+          <Route path="/admin/setup/units/:id" element={route("/admin/setup/units", <UnitDetail />)} />
+          <Route path="/admin/setup/units/purchase/:id" element={route("/admin/setup/units", <PurchaseDetail />)} />
+          <Route path="/admin/setup/suppliers" element={route("/admin/setup/suppliers", <Suppliers />)} />
           <Route path="/admin/welcome" element={<NotYet />} />
           <Route path="*" element={<Navigate to={home} replace />} />
         </Routes>

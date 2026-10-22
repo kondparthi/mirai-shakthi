@@ -140,6 +140,24 @@ def load_finance(db) -> None:
             db.add(EnterpriseModel(**m))
 
 
+def load_setup(db) -> None:
+    """Phase 1 Sprint 4: registrations / readiness items for the starter models (only where empty) and sample suppliers."""
+    from app.models_p3 import EnterpriseModel
+    from app.models_p4 import Supplier
+    from seed.data_p4 import MODEL_SETUP, SUPPLIERS
+
+    for m in db.scalars(select(EnterpriseModel)):
+        extra = MODEL_SETUP.get(m.code)
+        if extra and m.registrations is None:
+            m.registrations = extra["registrations"]
+        if extra and m.readiness_items is None:
+            m.readiness_items = extra["readiness_items"]
+    have = set(db.scalars(select(Supplier.name)))
+    for s in SUPPLIERS:
+        if s["name"] not in have:
+            db.add(Supplier(**s, approved=True, note="Sample supplier – replace before go-live"))
+
+
 def main(reset: bool = False) -> None:
     ensure_database()
     if reset:
@@ -186,6 +204,8 @@ def main(reset: bool = False) -> None:
         load_masters(db)
         load_courses(db)
         load_finance(db)
+        db.flush()
+        load_setup(db)
         # Demo portal login for one sample expert (screen E1). Change or remove before go-live.
         demo = db.scalar(select(Expert).where(Expert.name == "Sample CA – Guntur"))
         demo_email = os.getenv("DEMO_EXPERT_EMAIL", "ca.guntur@mirai.local")

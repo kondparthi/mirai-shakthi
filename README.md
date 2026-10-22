@@ -249,6 +249,31 @@ Staff portal → **DPR & finance**. Entrepreneur app → Programme → **My busi
 3. Front end: `npm run build`.
 4. Back up `backend/storage/loan_docs` with the other storage folders.
 
+## Phase 1, Sprint 4 – Enterprise set-up & procurement (M7)
+
+Staff portal → **Enterprise set-up**. Supplier portal → **#/supplier**. Entrepreneur app → Programme → **My enterprise set-up** (from stage 4).
+
+| Who | Can |
+|---|---|
+| Procurement Officer, Programme Manager, Admin | Suppliers and their portal logins, purchases, quotations, purchase orders |
+| District Coordinator, DPR officer | Delivery, installation photos and handover, assets, registrations, readiness checklist |
+| Coordinator, Procurement, Programme Manager, Admin | Launch a unit |
+| Supplier (portal login) | See requests sent to them, send quotations (with a file), confirm orders, report delivery |
+
+- **Unit**: created automatically when a loan is sanctioned (or an own-funds DPR is approved); approved DPRs without a unit can be started by hand. Registrations needed come from the enterprise model (e.g. Udyam, FSSAI, trade licence; drone UIN, RPC, insurance). A DGCA RPC or FSSAI certificate verified during training counts as done.
+- **Suppliers (Form 7.1)**: GSTIN check, items supplied (same names as the model's equipment list, so suppliers are matched automatically), models, districts, rate card with validity, approval, delivery record (orders, on-time %). **The four starter suppliers are samples – replace them.**
+- **Purchase (Form 7.2)**: starts from the approved DPR's equipment list → ask approved suppliers in the district to quote → quotations side by side (lowest per item and in total, % against the DPR estimate, delivery days, warranty, file) → choose. Choosing other than the lowest, or with only one quotation, needs a written reason, kept on the record. → **Purchase order PDF** (PO number, delivery address, terms) with payment source → supplier confirms → delivered → installation photos + handover note → the items go into the **asset register** with serial numbers and warranty dates.
+- **Asset register** per unit: serial number, value, warranty, insurance, status; group units hold shared assets. Equipment the person already owns can be added by hand.
+- **Readiness checklist (Form 7.3)**: equipment (every DPR item installed or in the asset register), registrations and training (MIRAI certificate or verified external certificate) are checked automatically; working capital, bookkeeping and the model's own items (branding, menu board, hygiene check, test flight…) are ticked with an optional photo. **Launch** needs every item done; the unit becomes *Launched* and the entrepreneur moves to stage 5 (Sell & deliver).
+- **Entrepreneur app**: what is being bought and when it arrives, registrations (upload a document from the phone), the checklist, and their equipment with warranty dates – English / Telugu.
+- **Set-up dashboard**: units setting up / launched, purchases by stage, amount ordered vs the DPR estimate, days from order to installation, pending registrations, supplier delivery record, late deliveries, units ready to launch.
+
+### Updating to Phase 1 Sprint 4
+
+1. Copy the changed files over the project, `git push`, then `mirai-update` on the server (it runs the seed: new tables, two new columns on enterprise models, sample suppliers). No new packages.
+2. Back up `backend/storage/setup` (quotation files, installation photos, registration documents).
+3. Create supplier portal logins from Enterprise set-up → Suppliers → key icon. Suppliers sign in at `https://<your site>/#/supplier`.
+
 ## Run it on your computer
 
 Requirements: Python 3.12+ (3.14 works), Node 20+, MySQL 8. On Windows use `py -m pip …` and `py -m …` so packages and commands use the same Python.

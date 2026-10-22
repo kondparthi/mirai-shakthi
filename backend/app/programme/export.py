@@ -44,6 +44,11 @@ def person_export(db: Session, user: User) -> dict:
                                      "emi": a.emi_amount, "repayments": [{"n": r.n, "due": _iso(r.due_date), "amount": r.amount,
                                                                            "paid_on": _iso(r.paid_on)} for r in a.repayments]}
                                     for a in db.scalars(select(LoanApplication).where(LoanApplication.entrepreneur_id == e.id))]
+        from ..models_p4 import Unit
+        out["enterprise_units"] = [{"code": u.code, "name": u.name, "status": u.status, "launch_date": _iso(u.launch_date),
+                                    "assets": [{"item": a.item, "serial_no": a.serial_no, "value": a.value} for a in u.assets],
+                                    "registrations": [{"kind": r.kind, "status": r.status, "number": r.number} for r in u.registrations]}
+                                   for u in db.scalars(select(Unit).where(Unit.entrepreneur_id == e.id))]
         out["groups"] = [{"group": gm.group.name, "role": gm.role, "contribution": gm.contribution}
                          for gm in db.scalars(select(GroupMember).where(GroupMember.entrepreneur_id == e.id))]
     sessions = list(db.scalars(select(GuidanceSession).where(GuidanceSession.user_id == user.id).order_by(GuidanceSession.id)))

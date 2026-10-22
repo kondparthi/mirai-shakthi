@@ -11,6 +11,7 @@ export default function EntrepreneurFinance({ eid, name }: { eid: number; name: 
   const navigate = useNavigate();
   const [dprs, setDprs] = useState<DprRow[] | null>(null);
   const [apps, setApps] = useState<AppRow[]>([]);
+  const [units, setUnits] = useState<{ id: number; code: string; name: string; status: string; readiness: { done: number; total: number } }[]>([]);
   const [modelId, setModelId] = useState<number | "">("");
   const [check, setCheck] = useState<SchemeCheck[] | null>(null);
   const [creating, setCreating] = useState(false);
@@ -18,6 +19,7 @@ export default function EntrepreneurFinance({ eid, name }: { eid: number; name: 
   useEffect(() => {
     api<{ rows: DprRow[] }>(`/dpr/dprs?entrepreneur_id=${eid}`).then((r) => setDprs(r.rows)).catch(() => setDprs([]));
     api<{ rows: AppRow[] }>(`/dpr/applications?entrepreneur_id=${eid}`).then((r) => setApps(r.rows)).catch(() => {});
+    api<{ rows: typeof units }>(`/setup/units?entrepreneur_id=${eid}`).then((r) => setUnits(r.rows)).catch(() => {});
   }, [eid]);
   useEffect(() => {
     if (!meta) return;
@@ -43,6 +45,11 @@ export default function EntrepreneurFinance({ eid, name }: { eid: number; name: 
         <Link key={a.id} to={`/admin/finance/applications/${a.id}`} className="row-between">
           <span>Loan: <b>{a.bank_name}</b>, {a.branch}</span>
           <span className="small">{inr(a.sanctioned_amount ?? a.amount_requested)} <span className={`tag ${APP_TAG[a.status]}`}>{a.status_label}</span></span>
+        </Link>))}
+      {units.map((u) => (
+        <Link key={u.id} to={`/admin/setup/units/${u.id}`} className="row-between">
+          <span>Unit: <b>{u.name}</b> <span className="small muted">{u.code}</span></span>
+          <span className="small">readiness {u.readiness.done}/{u.readiness.total} <span className={`tag ${u.status === "launched" ? "ok" : "amber"}`}>{u.status.replace("_", " ")}</span></span>
         </Link>))}
       <div className="row-gap" style={{ alignItems: "center" }}>
         <b className="small">Schemes that fit for</b>
