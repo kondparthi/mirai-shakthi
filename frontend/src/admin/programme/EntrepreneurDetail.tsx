@@ -7,6 +7,7 @@ import { ReadinessForm, ReadinessResult } from "../../components/Readiness";
 import { Modal } from "../ui";
 import { Avatar } from "./Entrepreneurs";
 import EntrepreneurTraining from "../training/EntrepreneurTraining";
+import EntrepreneurFinance from "../dpr/EntrepreneurFinance";
 
 const STAGES = ["Enrol & assess", "Train & certify", "DPR & finance", "Set up enterprise", "Sell & deliver", "Track business", "Mentor & resolve", "Grow & sustain"];
 const WRITE = ["admin", "programme_manager", "coordinator", "federation_staff"];
@@ -143,6 +144,7 @@ export default function EntrepreneurDetail() {
       </div>
 
       <EntrepreneurTraining eid={e.id} />
+      <EntrepreneurFinance eid={e.id} name={e.full_name} />
 
       {modal === "edit" && (
         <Modal title="Edit details" wide onClose={() => setModal(null)}>

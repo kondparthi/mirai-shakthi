@@ -125,6 +125,21 @@ def load_courses(db) -> None:
             db.add(Course(**c))
 
 
+def load_finance(db) -> None:
+    """Phase 1 Sprint 3: enterprise models (DPR templates) and the scheme library. Adds only what is missing."""
+    from app.models_p3 import EnterpriseModel, Scheme
+    from seed.data_p3 import MODELS, SCHEMES
+
+    have = set(db.scalars(select(Scheme.code)))
+    for s in SCHEMES:
+        if s["code"] not in have:
+            db.add(Scheme(**s, sample=True))
+    have = set(db.scalars(select(EnterpriseModel.code)))
+    for m in MODELS:
+        if m["code"] not in have:
+            db.add(EnterpriseModel(**m))
+
+
 def main(reset: bool = False) -> None:
     ensure_database()
     if reset:
@@ -170,6 +185,7 @@ def main(reset: bool = False) -> None:
         load_telugu(db)
         load_masters(db)
         load_courses(db)
+        load_finance(db)
         # Demo portal login for one sample expert (screen E1). Change or remove before go-live.
         demo = db.scalar(select(Expert).where(Expert.name == "Sample CA – Guntur"))
         demo_email = os.getenv("DEMO_EXPERT_EMAIL", "ca.guntur@mirai.local")

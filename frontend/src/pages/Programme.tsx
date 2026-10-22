@@ -146,6 +146,12 @@ export default function Programme() {
         <div><b>{t("myTraining")}</b><div className="small">{t("trainingIntro")}</div></div>
         <span aria-hidden="true">→</span>
       </Link>
+      {e!.stage >= 3 && (
+        <Link to="/business-plan" className="card programme-card">
+          <div><b>{t("myPlan")}</b><div className="small">{t("planIntro")}</div></div>
+          <span aria-hidden="true">→</span>
+        </Link>
+      )}
 
       <div className="card stack">
         <h2 style={{ margin: 0 }}>{t("readiness")}</h2>

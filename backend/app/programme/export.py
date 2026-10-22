@@ -36,6 +36,14 @@ def person_export(db: Session, user: User) -> dict:
                            for t in db.scalars(select(Trainee).where(Trainee.entrepreneur_id == e.id))]
         out["external_certificates"] = [{"title": x.title, "number": x.number, "issuer": x.issuer, "status": x.status}
                                         for x in db.scalars(select(ExternalCertificate).where(ExternalCertificate.entrepreneur_id == e.id))]
+        from ..models_p3 import Dpr, LoanApplication
+        out["business_plans"] = [{"code": d.code, "unit": d.unit_name, "status": d.status, "version": d.version, "figures": d.results}
+                                 for d in db.scalars(select(Dpr).where(Dpr.entrepreneur_id == e.id))]
+        out["loan_applications"] = [{"code": a.code, "bank": a.bank, "branch": a.branch, "amount_requested": a.amount_requested,
+                                     "status": a.status, "sanctioned": a.sanctioned_amount, "disbursed": a.disbursed_amount,
+                                     "emi": a.emi_amount, "repayments": [{"n": r.n, "due": _iso(r.due_date), "amount": r.amount,
+                                                                           "paid_on": _iso(r.paid_on)} for r in a.repayments]}
+                                    for a in db.scalars(select(LoanApplication).where(LoanApplication.entrepreneur_id == e.id))]
         out["groups"] = [{"group": gm.group.name, "role": gm.role, "contribution": gm.contribution}
                          for gm in db.scalars(select(GroupMember).where(GroupMember.entrepreneur_id == e.id))]
     sessions = list(db.scalars(select(GuidanceSession).where(GuidanceSession.user_id == user.id).order_by(GuidanceSession.id)))

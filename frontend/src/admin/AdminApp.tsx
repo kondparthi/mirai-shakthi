@@ -1,6 +1,6 @@
 import { lazy, Suspense, useState } from "react";
 import {
-  Activity, BadgeCheck, BookOpen, Building2, ChartColumn, Database, ExternalLink, GraduationCap, KeyRound, Landmark, LayoutDashboard, Library,
+  Activity, BadgeCheck, BadgeIndianRupee, BookOpen, Boxes, FileSpreadsheet, HandCoins, Building2, ChartColumn, Database, ExternalLink, GraduationCap, KeyRound, Landmark, LayoutDashboard, Library,
   ListChecks, Menu, MessagesSquare, PhoneCall, ScrollText, ShieldCheck, SlidersHorizontal, TriangleAlert, Upload, UserRound, Users as UsersIcon, UsersRound,
   type LucideIcon,
 } from "lucide-react";
@@ -36,6 +36,13 @@ const Partners = lazy(() => import("./training/Partners"));
 const FollowUps = lazy(() => import("./training/FollowUps"));
 const TrainingReports = lazy(() => import("./training/Reports"));
 const ExternalQueue = lazy(() => import("./training/Reports").then((m) => ({ default: m.ExternalQueue })));
+const Dprs = lazy(() => import("./dpr/Dprs"));
+const DprBuilder = lazy(() => import("./dpr/DprBuilder"));
+const Applications = lazy(() => import("./dpr/Applications"));
+const ApplicationDetail = lazy(() => import("./dpr/Applications").then((m) => ({ default: m.ApplicationDetail })));
+const Schemes = lazy(() => import("./dpr/Schemes"));
+const Models = lazy(() => import("./dpr/Models"));
+const FinanceReports = lazy(() => import("./dpr/FinanceReports"));
 
 function AdminLogin() {
   const { signIn } = useAuth();
@@ -102,12 +109,19 @@ const NAV: [string, NavItem[]][] = [
     ["/admin/training/partners", "Training partners", Building2, MANAGERS],
     ["/admin/training/reports", "Training reports", ChartColumn, TRAIN_READ],
   ]],
+  ["DPR & finance", [
+    ["/admin/finance", "Finance dashboard", BadgeIndianRupee, ALL_READ],
+    ["/admin/finance/dprs", "DPRs", FileSpreadsheet, ALL_READ],
+    ["/admin/finance/applications", "Loan applications", HandCoins, ALL_READ],
+    ["/admin/finance/schemes", "Schemes", Landmark, ALL_READ],
+    ["/admin/finance/models", "Enterprise models", Boxes, ALL_READ],
+  ]],
   ["AI assistant", [
     ["/admin", "Assistant dashboard", Activity, AI],
     ["/admin/review", "Answer review", TriangleAlert, AI],
     ["/admin/knowledge", "Knowledge library", Library, AI],
     ["/admin/topics", "Topics & rules", ListChecks, AI],
-    ["/admin/experts", "Experts", Landmark, ["admin"]],
+    ["/admin/experts", "Experts", Building2, ["admin"]],
     ["/admin/requests", "Expert requests", MessagesSquare, AI],
     ["/admin/users", "App users", UsersIcon, AI],
   ]],
@@ -163,7 +177,7 @@ export default function AdminApp() {
             <div key={title} className="nav-group">
               <div className="nav-title">{title}</div>
               {items.map(([to, label, Icon]) => (
-                <NavLink key={to} to={to} end={to === "/admin"}>
+                <NavLink key={to} to={to} end={to === "/admin" || to === "/admin/finance"}>
                   <Icon aria-hidden="true" strokeWidth={1.9} />
                   {label}
                 </NavLink>
@@ -211,6 +225,13 @@ export default function AdminApp() {
           <Route path="/admin/training/courses" element={route("/admin/training/courses", <Courses />)} />
           <Route path="/admin/training/partners" element={route("/admin/training/partners", <Partners />)} />
           <Route path="/admin/training/reports" element={route("/admin/training/reports", <TrainingReports />)} />
+          <Route path="/admin/finance" element={route("/admin/finance", <FinanceReports />)} />
+          <Route path="/admin/finance/dprs" element={route("/admin/finance/dprs", <Dprs />)} />
+          <Route path="/admin/finance/dprs/:id" element={route("/admin/finance/dprs", <DprBuilder />)} />
+          <Route path="/admin/finance/applications" element={route("/admin/finance/applications", <Applications />)} />
+          <Route path="/admin/finance/applications/:id" element={route("/admin/finance/applications", <ApplicationDetail />)} />
+          <Route path="/admin/finance/schemes" element={route("/admin/finance/schemes", <Schemes />)} />
+          <Route path="/admin/finance/models" element={route("/admin/finance/models", <Models />)} />
           <Route path="/admin/welcome" element={<NotYet />} />
           <Route path="*" element={<Navigate to={home} replace />} />
         </Routes>

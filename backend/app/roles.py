@@ -35,3 +35,10 @@ TRAINING_ADMIN = ("admin", "programme_manager")                  # courses and t
 BATCH_WRITE = ("admin", "programme_manager", "coordinator")      # plan batches, nominate, verify external certificates
 TRAINING_RUN = BATCH_WRITE + ("trainer",)                        # sessions, attendance, assessment, results
 FOLLOWUP_WRITE = ("admin", "programme_manager", "coordinator", "mentor")
+
+# Phase 1 Sprint 3 – DPR & finance (M5, M6)
+DPR_READ = PROGRAMME_READ                                        # see DPRs and applications in scope
+DPR_WRITE = ("admin", "programme_manager", "dpr_officer")        # prepare DPRs, track applications and repayments
+DPR_APPROVE = ("admin", "programme_manager", "dpr_officer")      # review and approve DPRs
+MODELS_WRITE = ("admin", "programme_manager", "sector_expert")   # enterprise models (DPR templates)
+SCHEMES_WRITE = ("admin", "programme_manager", "dpr_officer")    # scheme library

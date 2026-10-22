@@ -108,6 +108,8 @@ const T = {
   rejected: ["Not done", "చేయలేదు"],
   // Training (Sprint 2)
   myTraining: ["My training", "నా శిక్షణ"],
+  myPlan: ["My business plan & loan", "నా వ్యాపార ప్రణాళిక & రుణం"],
+  planIntro: ["Your project report (DPR), loan application status and EMIs.", "మీ ప్రాజెక్టు నివేదిక (డీపీఆర్), రుణ దరఖాస్తు స్థితి, వాయిదాలు."],
   trainingIntro: ["Entrepreneurship (EDP) and skill training, with a certificate you can show to banks.", "వ్యవస్థాపక (ఈడీపీ), నైపుణ్య శిక్షణ – బ్యాంకులకు చూపించగల సర్టిఫికేట్‌తో."],
   recommendedForYou: ["Recommended for you", "మీకు సిఫార్సు"],
   myBatches: ["My batches", "నా బ్యాచ్‌లు"],

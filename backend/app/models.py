@@ -251,3 +251,4 @@ class AuditLog(Base):
 # Phase 1 tables live in their own module; importing it registers them with the same metadata.
 from . import models_p1  # noqa: E402,F401
 from . import models_p2  # noqa: E402,F401
+from . import models_p3  # noqa: E402,F401  (Phase 1 Sprint 3 tables)

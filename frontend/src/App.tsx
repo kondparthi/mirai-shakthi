@@ -1,7 +1,7 @@
 import { lazy, Suspense, useEffect } from "react";
 import { Navigate, NavLink, Route, Routes, useLocation, useParams } from "react-router-dom";
 import { useAuth } from "./auth";
-import { GraduationCap, ShieldCheck, Sprout, UserRound } from "lucide-react";
+import { GraduationCap, Landmark, ShieldCheck, Sprout, UserRound } from "lucide-react";
 import Logo from "./components/Logo";
 import UserMenu from "./components/UserMenu";
 import { useLang } from "./i18n";
@@ -23,6 +23,7 @@ const MyData = lazy(() => import("./pages/MyData"));
 const Training = lazy(() => import("./pages/Training"));
 const Checkin = lazy(() => import("./pages/Training").then((m) => ({ default: m.Checkin })));
 const Verify = lazy(() => import("./pages/Verify"));
+const BusinessPlan = lazy(() => import("./pages/BusinessPlan"));
 
 function CheckinRoute() {
   const { token = "" } = useParams();
@@ -66,6 +67,7 @@ function Shell({ children }: { children: React.ReactNode }) {
             <NavLink role="menuitem" to="/profile"><UserRound aria-hidden="true" />{t("profile")}</NavLink>
             <NavLink role="menuitem" to="/programme"><Sprout aria-hidden="true" />{t("programmeCardTitle")}</NavLink>
             <NavLink role="menuitem" to="/training"><GraduationCap aria-hidden="true" />{lang === "te" ? "నా శిక్షణ" : "My training"}</NavLink>
+            <NavLink role="menuitem" to="/business-plan"><Landmark aria-hidden="true" />{lang === "te" ? "వ్యాపార ప్రణాళిక & రుణం" : "Business plan & loan"}</NavLink>
             <NavLink role="menuitem" to="/my-data"><ShieldCheck aria-hidden="true" />{t("myDataLink")}</NavLink>
           </>} />
       </header>
@@ -122,7 +124,7 @@ export default function App() {
   if (user.role === "expert") return <Navigate to="/expert" replace />;
   if (user.role !== "msme") return <Navigate to="/admin" replace />;
   // The business profile is needed for guidance; the programme enrolment has its own form, so it is reachable without it.
-  const noProfileOk = ["/profile", "/programme", "/my-data", "/training", "/checkin"].some((p) => location.pathname.startsWith(p));
+  const noProfileOk = ["/profile", "/programme", "/my-data", "/training", "/checkin", "/business-plan"].some((p) => location.pathname.startsWith(p));
   if (!user.has_profile && !noProfileOk) return <Navigate to="/profile" replace />;
 
   return (
@@ -142,6 +144,7 @@ export default function App() {
         <Route path="/programme" element={<Programme />} />
         <Route path="/my-data" element={<MyData />} />
         <Route path="/training" element={<Training />} />
+        <Route path="/business-plan" element={<BusinessPlan />} />
         <Route path="/checkin/:token" element={<CheckinRoute />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

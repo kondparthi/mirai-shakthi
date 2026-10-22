@@ -216,6 +216,39 @@ Staff portal → **Training**. Entrepreneur app → Programme → **My training*
 5. Optional: `PUBLIC_URL` in `.env` (default `https://miraimsme.com`) is the address printed in certificate and check-in QR codes.
 6. Back up `backend/storage/` (photos and uploaded certificates).
 
+## Phase 1, Sprint 3 – DPR & finance (M5, M6)
+
+Staff portal → **DPR & finance**. Entrepreneur app → Programme → **My business plan & loan** (shown from stage 3).
+
+| Who | Can |
+|---|---|
+| DPR & Credit Officer, Programme Manager, Admin | Prepare, review and approve DPRs; loan applications, status updates, EMI tracking; edit schemes |
+| Sector Expert | Edit enterprise models (DPR templates) |
+| Coordinator, Mentor and other programme staff | See DPRs and applications in their districts |
+
+- **Enterprise models (Form 3.1)** are the DPR templates: equipment list, working capital, sales and expense defaults, eligible schemes, jobs, payback. Three starter models: mobile millet café, tea stall, drone spraying.
+- **DPR builder (Form 5.1)**:
+  - "New DPR" from the entrepreneur page (or DPRs → New) fills equipment, sales and expenses from the model; own money from what the person said they have.
+  - Inputs: capital items, contingency, pre-operative costs, working capital, own / subsidy / grant (the loan is the balance), sales items, expenses, loan terms with moratorium, owner's drawings, depreciation, tax, 3–5 years.
+  - Every figure is calculated by the server (`app/dpr/finance.py`) as you type: project cost, means of finance, 5-year profit and loss, cash flow, DSCR (after owner's drawings), break-even, payback, EMI and repayment schedule.
+  - Warnings in plain language; errors (e.g. DSCR below 1, over-funding) block approval.
+- **Schemes (M6)**: PMEGP, PMFME, MUDRA, Stand-Up India with rules for age, category, activity, sector, cost and loan limits, education, own contribution and subsidy rates, plus document lists. The check is rules only, with a reason for each result. "Use this scheme" sets the subsidy and raises own money to the minimum. **The starter rules are marked "starter data – verify"; the DPR officer checks them against the current guidelines and sets "Verified on".**
+- **Narrative**: officer's notes + figures → AI drafts promoter, business, market, operations, SWOT, risks and conclusion (a template drafts them when `AI_PROVIDER=none`). The officer edits every section.
+- **Review / approve / reopen**: approved DPRs are locked; reopening makes a new version. Every review, approval and reopen keeps a copy, and each version's PDF can be downloaded.
+- **PDF**: bank format (cover, project at a glance, cost, means of finance, sales, expenses, profitability with chart, cash flow, DSCR, break-even, repayment, SWOT, sign-off, monthly schedule annexure). Drafts carry a "DRAFT – NOT APPROVED" watermark. Amounts print as "Rs." (the bundled font has no ₹ sign); Telugu names are drawn correctly.
+- **Loan applications (Forms 6.1, 6.2)** from an approved DPR: bank and branch, scheme (eligible only), document checklist (DPR and MIRAI EDP certificate ticked automatically; uploads; extra documents the bank asks for), status Draft → Submitted → Bank query → Sanctioned → Disbursed / Rejected with dates, query and response log.
+- **Disbursement** creates the EMI schedule (the bank's EMI or calculated); staff mark EMIs paid; on time / delayed / default-risk (3+ overdue) is shown.
+- **Lifecycle**: creating a DPR moves the person to stage 3; sanction (or an approved DPR with no loan – own funds) moves them to stage 4.
+- **Entrepreneur app**: key figures in English / Telugu, approved DPR download, loan status and history, upload missing documents with the phone camera, next EMI and the schedule.
+- **Finance dashboard** and CSV of all applications (for banks / sponsors).
+
+### Updating to Phase 1 Sprint 3
+
+1. Copy the changed files over the project.
+2. Back end: `py -m seed.seed` (new tables, three enterprise models, four schemes). No new packages.
+3. Front end: `npm run build`.
+4. Back up `backend/storage/loan_docs` with the other storage folders.
+
 ## Run it on your computer
 
 Requirements: Python 3.12+ (3.14 works), Node 20+, MySQL 8. On Windows use `py -m pip …` and `py -m …` so packages and commands use the same Python.
